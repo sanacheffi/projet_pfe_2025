@@ -39,7 +39,8 @@ const orderSchema = new mongoose.Schema({
       city: { type: String, required: true },
       postalCode: { type: String, required: true },
       country: { type: String, required: true },
-    },
+      phone: { type: String, required: true }
+    },    
     paymentMethod: {
         type: String,
         required: true,
@@ -64,7 +65,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentStatus: {
         type: String,
-        default: "pending",
+        default: "Paiement à la Livraison",
     },
     status: {
         type: String,

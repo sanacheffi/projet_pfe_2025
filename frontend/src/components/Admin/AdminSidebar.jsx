@@ -1,6 +1,6 @@
 import React from 'react'
 import { BsChatSquareTextFill } from 'react-icons/bs';
-import { FaBoxOpen, FaClipboardList, FaSignOutAlt, FaStore, FaUser } from 'react-icons/fa'
+import { FaBoxOpen, FaClipboardList, FaSignOutAlt, FaStore, FaTools, FaUser } from 'react-icons/fa'
 import { useDispatch } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/slices/authSlice';
@@ -56,6 +56,15 @@ const AdminSidebar = () => {
         : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
             <BsChatSquareTextFill /> 
             <span>Réclamation</span>
+            </NavLink>
+            <NavLink 
+            to="/"
+        className={({ isActive }) =>
+            isActive
+        ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+        : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+            <FaTools />
+            <span>Matières premières</span>
             </NavLink>
             <NavLink 
             to="/"

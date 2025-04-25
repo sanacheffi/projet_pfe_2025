@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { submitContactForm } from '../redux/slices/contactSlice';
 
 const ContactPage = () => {
+  const dispatch = useDispatch();
   const [contactData, setContactData] = useState({
     name: '',
     phone: '',
@@ -13,7 +16,7 @@ const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Message envoyé:', contactData);
+    dispatch(submitContactForm(contactData));
     setSubmitted(true);
   };
 

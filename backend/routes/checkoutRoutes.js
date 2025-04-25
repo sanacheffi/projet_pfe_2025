@@ -3,83 +3,131 @@ const Checkout = require("../models/Checkout");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
+const axios = require("axios");
 const { protect } = require("../middleware/authMiddleware");
-
+const User = require("../models/User");
+require("dotenv").config();
 const router = express.Router();
 
 // @route POST /api/checkout
 // @desc Create a new checkout session
 // @access Private
 router.post("/", protect, async (req, res) => {
-  const { checkoutItems, shippingAddress, paymentMethod, totalPrice } = req.body;
+  const { checkoutItems, shippingAddress, paymentMethod, totalPrice, guestId } = req.body;
 
   if (!checkoutItems || checkoutItems.length === 0) {
-    return res.status(400).json({ message: "no items in checkout" });
+    return res.status(400).json({ message: "No items in checkout" });
   }
 
   try {
-    // Create a new checkout session
+    // Create a checkout document
     const newCheckout = await Checkout.create({
       user: req.user._id,
-      checkoutItems: checkoutItems,
+      checkoutItems,
       shippingAddress,
       paymentMethod,
       totalPrice,
-      paymentStatus: "Pending",
-      isPaid: false,
+      paymentStatus: paymentMethod === "Paiement en ligne" ? "En attente" : "Paiement à la Livraison",
+      isPaid: paymentMethod === "Paiement à la livraison",
+      paidAt: paymentMethod === "Paiement à la livraison" ? Date.now() : null,
     });
-    console.log(`Checkout created for user: ${req.user._id}`);
-    res.status(201).json(newCheckout);
-  } catch (error) {
-    console.error("Error Creating checkout session:", error);
-    res.status(500).json({message:"Server Error"});
-  }  
-});
 
+    // Auto-finalize if it's COD
+    if (paymentMethod === "Paiement à la livraison") {
+      const order = await Order.create({
+        user: newCheckout.user,
+        orderItems: newCheckout.checkoutItems,
+        shippingAddress: newCheckout.shippingAddress,
+        paymentMethod: newCheckout.paymentMethod,
+        totalPrice: newCheckout.totalPrice,
+        isPaid: false,
+        paidAt: newCheckout.paidAt,
+        paymentStatus: "Paiement à la Livraison",
+      });
 
-// @route PUT /api/checkout/:id/pay
-// @desc Update checkout to mark as paid after successful payment
-// @access Private
-router.put("/:id/pay", protect, async (req, res) => {
-  const { paymentStatus, paymentDetails } = req.body;
+      newCheckout.isFinalized = true;
+      newCheckout.finalizedAt = Date.now();
+      await newCheckout.save();
 
-  try {
-    const checkout = await Checkout.findById(req.params.id);
-
-    if (!checkout) {
-      return res.status(404).json({ message: "Checkout not found" });
+      // console.log("Deleting cart for user:", req.user._id);
+      // console.log("Guest ID (if any):", guestId);
+      
+      // const cartToDelete = await Cart.findOne({
+      //   $or: [
+      //     { user: req.user._id },
+      //     { guestId }
+      //   ]
+      // });
+      // console.log("Cart to delete:", cartToDelete);
+      await Cart.findOneAndDelete({
+        $or: [
+          { user: req.user._id },
+          { guestId }
+        ]
+      });
+          
+      return res.status(201).json({ message: "Commande créée (COD)", order });
     }
 
-    if (paymentStatus === "paid") {
-      checkout.isPaid = true;
-      checkout.paymentStatus = paymentStatus;
-      checkout.paymentDetails = paymentDetails;
-      checkout.paidAt = Date.now();
-      await checkout.save();
-      res.status(200).json(checkout);
-    } else {
-      res.status(400).json({ message: "Invalid Payment Status" });
+    
+    // If Flouci, create a payment session
+    if (paymentMethod === "Paiement en ligne") {
+      const payload = {
+        app_token: "536aaec9-6214-4b59-9947-bf35f666a488",
+        app_secret: process.env.FLOUCI_SECRET,
+        amount: totalPrice * 1000, // in millimes
+        accept_card: "true",
+        session_timeout_secs: 1200,
+        success_link: `http://localhost:9000/api/checkout/${newCheckout._id}/success`,
+        fail_link: `http://localhost:9000/api/checkout/${newCheckout._id}/fail`,
+        developer_tracking_id: "ae55482e-1b66-4658-9ac6-1d752db05c35",
+      };
+      const flouciResponse = await axios.post(
+        "https://developers.flouci.com/api/generate_payment",
+        payload
+      );
+      return res.status(201).json({
+        checkout: newCheckout,
+        paymentLink: flouciResponse.data.result.link,
+        sessionId: flouciResponse.data.result.payment_id,
+      });      
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({message:"Server Error"});
+    console.error("Error in checkout:", error.message);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 });
 
-
-// @route POST /api/checkout/:id/finalize
-// @desc Finalize checkout and convert to an order after payment confirmation
-// @access Private
-router.post("/:id/finalize", protect, async (req, res) => {
+// @route GET /api/checkout/:id/success
+// @desc Finalize order after Flouci success
+// @access Public (Flouci redirect)
+router.get("/:id/success", async (req, res) => {
   try {
     const checkout = await Checkout.findById(req.params.id);
-    if (!checkout) {
-      return res.status(404).json({ message: "Checkout not found" });
+    if (!checkout || checkout.isFinalized) {
+      return res.status(400).send("Checkout déjà finalisé ou introuvable");
     }
 
-    if (checkout.isPaid && !checkout.isFinalized) {
-      // Create final order based on the checkout details
-      const finalOrder = await Order.create({
+    const verifyUrl = `https://developers.flouci.com/api/verify_payment/${req.query.payment_id}`;
+    const result = await axios.get(verifyUrl, {
+      headers: {
+        apppublic: "536aaec9-6214-4b59-9947-bf35f666a488",
+        appsecret: process.env.FLOUCI_SECRET,
+      },
+    });
+
+    const paymentData = result.data;
+
+    if (paymentData.success === true) {
+      checkout.isPaid = true;
+      checkout.paidAt = Date.now();
+      checkout.paymentStatus = "Payé";
+      checkout.paymentDetails = paymentData;
+      checkout.isFinalized = true;
+      checkout.finalizedAt = Date.now();
+      await checkout.save();
+
+      const order = await Order.create({
         user: checkout.user,
         orderItems: checkout.checkoutItems,
         shippingAddress: checkout.shippingAddress,
@@ -87,28 +135,24 @@ router.post("/:id/finalize", protect, async (req, res) => {
         totalPrice: checkout.totalPrice,
         isPaid: true,
         paidAt: checkout.paidAt,
-        isDelivered: false,
-        paymentStatus: "paid",
-        paymentDetails: checkout.paymentDetails
+        paymentStatus: "Payé",
+        paymentDetails: paymentData,
       });
-      
-      // Mark the checkout as finalized
-      checkout.isFinalized = true;
-      checkout.finalizedAt = Date.now();
-      await checkout.save();
-      
-      // Delete the cart associated with the user
-      await Cart.findOneAndDelete({ user: checkout.user });
-      res.status(201).json(finalOrder);
-    } else if (checkout.isFinalized) {
-      res.status(400).json({ message: "Checkout already finalized" });
+
+      await Cart.findOneAndDelete({
+        $or: [
+          { user: checkout.user },
+          { guestId: checkout.guestId }
+        ]
+      });      
+
+      return res.status(201).json({ message: "Paiement validé et commande créée", order });
     } else {
-      res.status(400).json({ message: "Checkout is not paid" });
+      return res.status(400).send("Paiement non validé");
     }
-    
   } catch (error) {
-    console.error(error);
-    res.status(500).json({message:"Server Error"});
+    console.error("Erreur de vérification Flouci:", error.message);
+    res.status(500).send("Erreur de paiement");
   }
 });
 

@@ -26,6 +26,7 @@ import MyOrdersPage from './pages/MyOrdersPage'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import ProtectedRoute from './components/Common/ProtectedRoute'
+import ProfileManagement from './pages/ProfileManagement'
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
       <Route path="order-confirmation" element={<OrderConfirmationPage/>}/>
       <Route path="order/:id" element={<OrderDetailsPage/>}/>
       <Route path="my-orders" element={<MyOrdersPage/>}/>
+      <Route path="profile-management" element={<ProfileManagement/>}/>
       </Route>
       {/* admin layout */}
       <Route path="/admin" element={<ProtectedRoute role="admin"> <AdminLayout/> </ProtectedRoute>}>

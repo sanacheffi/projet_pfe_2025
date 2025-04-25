@@ -6,9 +6,10 @@ export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
   async (checkoutdata, { rejectWithValue }) => {
     try {
+      const guestId = localStorage.getItem("guestId"); 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
-        checkoutdata,
+        { ...checkoutdata, guestId }, 
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
@@ -21,6 +22,7 @@ export const createCheckout = createAsyncThunk(
     }
   }
 );
+
 
 const checkoutSlice = createSlice({
     name: "checkout",

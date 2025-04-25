@@ -31,8 +31,8 @@ const MyOrdersPage = () => {
           <th className="py-2 px-4 sm:py-3">Image</th>
           <th className="py-2 px-4 sm:py-3">N° de la commande</th>
           <th className="py-2 px-4 sm:py-3">Passée le</th>
-          <th className="py-2 px-4 sm:py-3">Adresse d'expédition</th>
-          <th className="py-2 px-4 sm:py-3">Articles</th>
+          {/* <th className="py-2 px-4 sm:py-3">Adresse d'expédition</th>
+          <th className="py-2 px-4 sm:py-3">Articles</th> */}
           <th className="py-2 px-4 sm:py-3">Prix</th>
           <th className="py-2 px-4 sm:py-3">État</th>
         </tr>
@@ -54,20 +54,33 @@ const MyOrdersPage = () => {
               {new Date(order.createdAt).toLocaleDateString()}{" "}
               {new Date(order.createdAt).toLocaleTimeString()}
             </td>
-            <td className="py-2 px-2 sm:py-4 sm:px-4">
+            {/* <td className="py-2 px-2 sm:py-4 sm:px-4">
               {order.shippingAddress ? `${order.shippingAddress.city}, ${order.shippingAddress.country}` : "N/A"}
             </td>
             <td className="py-2 px-2 sm:py-4 sm:px-4">
               {order.orderItems.length}
+            </td> */}
+            <td className="py-2 px-2 sm:py-4 sm:px-4">
+              {order.totalPrice.toFixed(3)}
             </td>
             <td className="py-2 px-2 sm:py-4 sm:px-4">
-              {order.totalPrice}
-            </td>
-            <td className="py-2 px-2 sm:py-4 sm:px-4">
-              <span className={`${order.isPaid ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} px-2 py-1 rounded-full text-xs sm:text-sm font-medium`}>
-                {order.isPaid ? "Paid" : "Pending"}
-              </span>
-            </td>
+  <span
+    className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+      order.status === "En cours de traitement"
+        ? "bg-yellow-100 text-yellow-700"
+        : order.status === "Expédiée"
+        ? "bg-orange-100 text-orange-700"
+        : order.status === "Livrée"
+        ? "bg-green-100 text-green-700"
+        : order.status === "Annulée"
+        ? "bg-red-100 text-red-700"
+        : ""
+    }`}
+  >
+    {order.status}
+  </span>
+</td>
+
           </tr>
           ))
         ) : (

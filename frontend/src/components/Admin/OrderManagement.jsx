@@ -45,7 +45,7 @@ const OrderManagement = () => {
                         <tr key={order._id} className="border-b hover:bg-gray-50 cursor-pointer">
                             <td className="p-4 px-4 font-medium text-gray-900 whitespace-nowrap">#{order._id}</td>
                             <td className="p-4">{order.user.firstName} {order.user.lastName}</td>
-                            <td className="p-4">{order.totalPrice.toFixed(2)}</td>
+                            <td className="p-4">{order.totalPrice.toFixed(3)}</td>
                             <td className="p-4">
                                 <select 
                                 value={order.status} 

@@ -38,8 +38,10 @@ const checkoutSchema = new mongoose.Schema({
       address: { type: String, required: true },
       city: { type: String, required: true },
       postalCode: { type: String, required: true },
-      country: { type: String, required: true }
+      country: { type: String, required: true },
+      phone: { type: String, required: true }
     },
+    
     paymentMethod: {
         type: String,
         required: true,
@@ -57,7 +59,7 @@ const checkoutSchema = new mongoose.Schema({
     },
     paymentStatus: {
         type: String,
-        default: "pending",
+        default: "Paiement à la Livraison",
     },
     paymentDetails: {
         type: mongoose.Schema.Types.Mixed, // store payment-related details(transaction ID, paypal response)
