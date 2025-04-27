@@ -16,6 +16,26 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
+// @route GET /api/admin/orders/:id
+// @desc Get order details by ID (Admin only)
+// @access Private/Admin
+router.get("/:id", protect, admin, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("user", "firstName lastName email"); 
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+
 
 // @route PUT /api/admin/orders/:id
 // @desc Update order status

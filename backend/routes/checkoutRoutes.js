@@ -45,6 +45,12 @@ router.post("/", protect, async (req, res) => {
         paymentStatus: "Paiement à la Livraison",
       });
 
+      for (const item of newCheckout.checkoutItems) {
+        await Product.findByIdAndUpdate(item.productId, {
+          $inc: { countInStock: -item.quantity }
+        });
+      };      
+
       newCheckout.isFinalized = true;
       newCheckout.finalizedAt = Date.now();
       await newCheckout.save();

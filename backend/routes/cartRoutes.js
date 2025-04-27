@@ -42,6 +42,7 @@ router.post("/", async (req, res) => {
               image: product.images[0].url,
               price: product.price,
               quantity,
+              countInStock: product.countInStock,
             });
         }
         // Recalculate the total price
@@ -63,6 +64,7 @@ router.post("/", async (req, res) => {
                     image: product.images[0].url,
                     price: product.price,
                     quantity,
+                    countInStock: product.countInStock,
                 },
             ],
             totalPrice : product.price * quantity,

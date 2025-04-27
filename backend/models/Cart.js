@@ -13,6 +13,10 @@ const cartItemSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
+  countInStock: {
+    type: Number,
+    required: true
+  },
 },
 {_id: false}
 );

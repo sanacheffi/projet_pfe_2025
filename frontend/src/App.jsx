@@ -27,6 +27,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 import ProtectedRoute from './components/Common/ProtectedRoute'
 import ProfileManagement from './pages/ProfileManagement'
+import OrderDetailsAdmin from './components/Admin/OrderDetailsAdmin'
 
 const App = () => {
   return (
@@ -58,6 +59,7 @@ const App = () => {
       <Route path="products/add" element={<AddProduct/>}/>
       <Route path="products/:id/edit" element={<EditProduct/>}/>
       <Route path="orders" element={<OrderManagement/>}/>
+      <Route path="orders/:orderId" element={<OrderDetailsAdmin/>}/>
       <Route path="reclamation" element={<ReclamationManagement/>}/>
       </Route>
     </Routes>

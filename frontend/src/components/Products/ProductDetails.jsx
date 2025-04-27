@@ -41,6 +41,11 @@ const ProductDetails = ({ productId }) => {
   };
 
   const handleAddToCart = () => {
+    if (quantity > selectedProduct.countInStock) {
+      toast.warning("Stock insuffisant pour la quantité demandée", { duration: 1500 });
+      return; 
+    }
+  
     setIsButtonDisabled(true);
     dispatch(
       addToCart({
@@ -48,6 +53,7 @@ const ProductDetails = ({ productId }) => {
         quantity,
         guestId,
         userId: user?._id,
+        countInStock: selectedProduct.countInStock,
       })
     )
       .then(() => {
@@ -57,6 +63,7 @@ const ProductDetails = ({ productId }) => {
         setIsButtonDisabled(false);
       });
   };
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;

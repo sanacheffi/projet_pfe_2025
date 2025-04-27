@@ -17,7 +17,11 @@ const OrderManagement = () => {
         } else {
           dispatch(fetchAllOrders());
         }
-    }, [dispatch, user, navigate]);      
+    }, [dispatch, user, navigate]); 
+    
+    const handleRowClick = (orderId) => {
+        navigate(`/admin/orders/${orderId}`);
+    };
 
       
     const handleStatusChange = (orderId, status) => {
@@ -37,16 +41,18 @@ const OrderManagement = () => {
                         <th className="py-3 px-4">Client</th>
                         <th className="py-3 px-4">Prix total</th>
                         <th className="py-3 px-4">État</th>
-                        <th className="py-3 px-4"></th>
                     </tr>
                 </thead>
                 <tbody>
                 {orders.length > 0 ? orders.map((order) =>(
-                        <tr key={order._id} className="border-b hover:bg-gray-50 cursor-pointer">
+                        <tr key={order._id} 
+                        onClick={() => handleRowClick(order._id)}
+                        className="border-b hover:bg-gray-50 cursor-pointer">
                             <td className="p-4 px-4 font-medium text-gray-900 whitespace-nowrap">#{order._id}</td>
                             <td className="p-4">{order.user.firstName} {order.user.lastName}</td>
                             <td className="p-4">{order.totalPrice.toFixed(3)}</td>
-                            <td className="p-4">
+                            <td className="p-4">{order.status}</td>
+                            {/* <td className="p-4">
                                 <select 
                                 value={order.status} 
                                 onChange={(e) => handleStatusChange(order._id, e.target.value)}
@@ -63,7 +69,7 @@ const OrderManagement = () => {
                                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                                     Marquer comme livrée
                                 </button>
-                            </td>
+                            </td> */}
                         </tr>
                     )) : (<tr>
                         <td colSpan={5} className="p-4 text-center text-gray-500">
