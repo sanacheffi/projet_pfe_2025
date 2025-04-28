@@ -28,6 +28,9 @@ import store from './redux/store'
 import ProtectedRoute from './components/Common/ProtectedRoute'
 import ProfileManagement from './pages/ProfileManagement'
 import OrderDetailsAdmin from './components/Admin/OrderDetailsAdmin'
+import MaterialManagement from './components/Admin/MaterialManagement'
+import AddMaterial from './components/Admin/AddMaterial'
+import EditMaterial from './components/Admin/EditMaterial'
 
 const App = () => {
   return (
@@ -61,6 +64,9 @@ const App = () => {
       <Route path="orders" element={<OrderManagement/>}/>
       <Route path="orders/:orderId" element={<OrderDetailsAdmin/>}/>
       <Route path="reclamation" element={<ReclamationManagement/>}/>
+      <Route path="materials" element={<MaterialManagement/>}/>
+      <Route path="materials/add" element={<AddMaterial/>}/>
+      <Route path="materials/:id/edit" element={<EditMaterial/>}/>
       </Route>
     </Routes>
     </BrowserRouter>

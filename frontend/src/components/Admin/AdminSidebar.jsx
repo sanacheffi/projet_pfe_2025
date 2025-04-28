@@ -58,7 +58,7 @@ const AdminSidebar = () => {
             <span>Réclamation</span>
             </NavLink>
             <NavLink 
-            to="/"
+            to="/admin/materials"
         className={({ isActive }) =>
             isActive
         ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"

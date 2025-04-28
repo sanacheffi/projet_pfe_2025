@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { fetchOrderDetails, updateOrderStatus } from "../../redux/slices/adminOrderSlice";
+import Loader from "../Common/Loader";
 
 const OrderDetailsAdmin = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const OrderDetailsAdmin = () => {
     }
   };
 
-  if (loading) return <p>Loading ...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -102,9 +103,9 @@ const OrderDetailsAdmin = () => {
                             {item.name}
                         </Link>
                     </td>
-                    <td className="py-2 px-4">{item.price} DT</td>
+                    <td className="py-2 px-4">{item.price}</td>
                     <td className="py-2 px-4">{item.quantity}</td>
-                    <td className="py-2 px-4">{item.price * item.quantity} DT</td>
+                    <td className="py-2 px-4">{item.price * item.quantity}</td>
                   </tr>
                 ))}
               </tbody>

@@ -23,6 +23,7 @@ router.post("/", protect, async (req, res) => {
     // Create a checkout document
     const newCheckout = await Checkout.create({
       user: req.user._id,
+      guestId: guestId || null,
       checkoutItems,
       shippingAddress,
       paymentMethod,
@@ -129,6 +130,11 @@ router.get("/:id/success", async (req, res) => {
       checkout.paidAt = Date.now();
       checkout.paymentStatus = "Payé";
       checkout.paymentDetails = paymentData;
+      for (const item of checkout.checkoutItems) {
+        await Product.findByIdAndUpdate(item.productId, {
+          $inc: { countInStock: -item.quantity }
+        });
+      };
       checkout.isFinalized = true;
       checkout.finalizedAt = Date.now();
       await checkout.save();
@@ -150,7 +156,7 @@ router.get("/:id/success", async (req, res) => {
           { user: checkout.user },
           { guestId: checkout.guestId }
         ]
-      });      
+      });           
 
       return res.status(201).json({ message: "Paiement validé et commande créée", order });
     } else {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchContactMessages } from '../../redux/slices/contactSlice';
+import Loader from '../Common/Loader';
 
 const ReclamationManagement = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const ReclamationManagement = () => {
         dispatch(fetchContactMessages());
       }
   }, [dispatch, user, navigate]); 
-  if (loading) return <p>Loading ...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>; 
   return (
     <div className="max-w-7xl mx-auto p-4">

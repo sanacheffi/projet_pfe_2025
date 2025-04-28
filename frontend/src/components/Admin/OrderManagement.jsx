@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllOrders, updateOrderStatus } from '../../redux/slices/adminOrderSlice';
+import Loader from '../Common/Loader';
 
 const OrderManagement = () => {
 
@@ -24,11 +25,11 @@ const OrderManagement = () => {
     };
 
       
-    const handleStatusChange = (orderId, status) => {
-        dispatch(updateOrderStatus({ id: orderId, status }));
-    };
+    // const handleStatusChange = (orderId, status) => {
+    //     dispatch(updateOrderStatus({ id: orderId, status }));
+    // };
       
-    if (loading) return <p>Loading ...</p>;
+    if (loading) return <Loader />;
     if (error) return <p>Error: {error}</p>;      
   return (
     <div className="max-w-7xl mx-auto p-4">

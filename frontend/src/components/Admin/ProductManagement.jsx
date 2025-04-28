@@ -5,6 +5,7 @@ import { MdOutlineModeEditOutline } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { deleteProduct, fetchAdminProducts } from '../../redux/slices/adminProductSlice'
+import Loader from '../Common/Loader'
 
 const ProductManagement = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const ProductManagement = () => {
         }
     };
 
-    if (loading) return <p>Loading ...</p>;
+    if (loading) return <Loader />;
     if (error) return <p>Error: {error}</p>; 
 
   return (

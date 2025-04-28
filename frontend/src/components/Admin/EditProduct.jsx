@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductDetails, updateProduct } from "../../redux/slices/productsSlice";
 import axios from "axios";
+import Loader from "../Common/Loader";
 
 const EditProduct = () => {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ const EditProduct = () => {
               navigate("/admin/products")
             };
 
-            if (loading) return <p>Loading ...</p>;
+            if (loading) return <Loader />;
             if (error) return <p>Error: {error}</p>;     
         return (
             <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">

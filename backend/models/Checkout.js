@@ -33,6 +33,10 @@ const checkoutSchema = new mongoose.Schema({
       ref: "User",
       required: true
     },
+    guestId: {
+      type: String,
+      required: false,
+  },
     checkoutItems: [checkoutItemSchema],
     shippingAddress: {
       address: { type: String, required: true },

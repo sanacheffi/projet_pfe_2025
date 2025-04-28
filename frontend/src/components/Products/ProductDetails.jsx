@@ -6,6 +6,7 @@ import ProductGrid from "./ProductGrid";
 import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slices/productsSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
 import { SlClose } from "react-icons/sl";
+import Loader from "../Common/Loader";
 
 const ProductDetails = ({ productId }) => {
   const { id } = useParams();
@@ -65,7 +66,7 @@ const ProductDetails = ({ productId }) => {
   };
   
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader color="#dbb47e" />;
   if (error) return <p>Error: {error}</p>;
 
   const getStockStatus = () => {

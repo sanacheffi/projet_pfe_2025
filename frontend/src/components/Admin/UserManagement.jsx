@@ -4,6 +4,7 @@ import { IoMdAddCircle } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteUser, fetchUsers, updateUser } from '../../redux/slices/adminSlice';
+import Loader from '../Common/Loader';
 
 const UserManagement = () => {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const UserManagement = () => {
             dispatch(deleteUser(userId));
         }
     };
-    if (loading) return <p>Loading ...</p>;
+    if (loading) return <Loader />;
     if (error) return <p>Error: {error}</p>; 
   return (
     <div className="max-w-7xl mx-auto p-4">

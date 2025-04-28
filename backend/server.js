@@ -13,6 +13,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const productAdminRoutes = require("./routes/productAdminRoutes");
 const adminOrderRoutes = require("./routes/adminOrderRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const materialRoutes = require("./routes/materialRoutes");
 
 
 const app = express();
@@ -44,6 +45,7 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/admin/users", adminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", adminOrderRoutes);
+app.use("/api/materials", materialRoutes );
 
 
 app.listen(PORT, () => {
