@@ -12,6 +12,7 @@ const ProductDetails = ({ productId }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const { cart } = useSelector((state) => state.cart);
   const { selectedProduct, loading, error, similarProducts } = useSelector(
     (state) => state.products
   );
@@ -42,9 +43,18 @@ const ProductDetails = ({ productId }) => {
   };
 
   const handleAddToCart = () => {
-    if (quantity > selectedProduct.countInStock) {
-      toast.warning("Stock insuffisant pour la quantité demandée", { duration: 1500 });
-      return; 
+    const existingCartItem = cart.products.find(
+      (item) => item.productId === productFetchId
+    );
+  
+    const existingQuantity = existingCartItem ? existingCartItem.quantity : 0;
+    const totalRequestedQuantity = existingQuantity + quantity;
+  
+    if (totalRequestedQuantity > selectedProduct.countInStock) {
+      toast.warning("Stock insuffisant pour la quantité demandée", {
+        duration: 1500,
+      });
+      return;
     }
   
     setIsButtonDisabled(true);
@@ -64,6 +74,7 @@ const ProductDetails = ({ productId }) => {
         setIsButtonDisabled(false);
       });
   };
+  
   
 
   if (loading) return <Loader color="#dbb47e" />;

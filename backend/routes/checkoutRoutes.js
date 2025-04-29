@@ -158,7 +158,9 @@ router.get("/:id/success", async (req, res) => {
         ]
       });           
 
-      return res.status(201).json({ message: "Paiement validé et commande créée", order });
+      return res.redirect(
+        `http://localhost:5173/order-confirmation?orderId=${order._id}`
+      );
     } else {
       return res.status(400).send("Paiement non validé");
     }

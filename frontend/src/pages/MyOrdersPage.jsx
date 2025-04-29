@@ -8,11 +8,15 @@ const MyOrdersPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { user } = useSelector((state) => state.auth);
   const { orders, loading, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    dispatch(fetchUserOrders());
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchUserOrders());
+    }
+  }, [dispatch, user]);
+  
 
   const handleRowClick = (orderId) => {
     navigate(`/order/${orderId}`);
@@ -65,23 +69,21 @@ const MyOrdersPage = () => {
               {order.totalPrice.toFixed(3)}
             </td>
             <td className="py-2 px-2 sm:py-4 sm:px-4">
-  <span
-    className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
-      order.status === "En cours de traitement"
-        ? "bg-yellow-100 text-yellow-700"
-        : order.status === "Expédiée"
-        ? "bg-orange-100 text-orange-700"
-        : order.status === "Livrée"
-        ? "bg-green-100 text-green-700"
-        : order.status === "Annulée"
-        ? "bg-red-100 text-red-700"
-        : ""
-    }`}
-  >
-    {order.status}
-  </span>
-</td>
-
+              <span
+              className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                order.status === "En cours de traitement"
+                ? "bg-yellow-100 text-yellow-700"
+                : order.status === "Expédiée"
+                ? "bg-orange-100 text-orange-700"
+                : order.status === "Livrée"
+                ? "bg-green-100 text-green-700"
+                : order.status === "Annulée"
+                ? "bg-red-100 text-red-700"
+                : ""
+              }`}>
+                {order.status}
+              </span>
+            </td>
           </tr>
           ))
         ) : (

@@ -7,6 +7,7 @@ import Loader from "../components/Common/Loader";
 
 const AdminHomePage = () => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const {
     products,
     loading: productsLoading,
@@ -22,9 +23,11 @@ const AdminHomePage = () => {
   } = useSelector((state) => state.adminOrders);
 
   useEffect(() => {
-    dispatch(fetchAdminProducts());
-    dispatch(fetchAllOrders());
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchAdminProducts());
+      dispatch(fetchAllOrders());
+    }
+  }, [dispatch, user]);
   
 
   return (

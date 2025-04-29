@@ -2,80 +2,95 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}`;
-const USER_TOKEN = `Bearer ${localStorage.getItem("userToken")}`;
 
 // Async thunk to fetch all materials
 export const fetchMaterials = createAsyncThunk(
   "materials/fetchMaterials",
-  async () => {
-    const response = await axios.get(`${API_URL}/api/materials`, {
-      headers: {
-        Authorization: USER_TOKEN,
-      },
-    });
-    return response.data;
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.get(`${API_URL}/api/materials`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
+
 // Async thunk to fetch a single material by ID
 export const fetchMaterialById = createAsyncThunk(
-  "materials/fetchMaterialById", 
-  async (id) => {
-    const response = await axios.get(`${API_URL}/api/materials/${id}`,
-      {
-      headers: {
-        Authorization: USER_TOKEN,
-      },
+  "materials/fetchMaterialById",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.get(`${API_URL}/api/materials/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-    );
-    return response.data;
   }
 );
 
 // Async thunk to create a new material
 export const createMaterial = createAsyncThunk(
   "materials/createMaterial",
-  async (materialData) => {
-    const response = await axios.post(
-      `${API_URL}/api/materials`,
-      materialData,
-      {
+  async (materialData, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.post(`${API_URL}/api/materials`, materialData, {
         headers: {
-          Authorization: USER_TOKEN,
+          Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    return response.data;
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 // Async thunk to update an existing material
 export const updateMaterial = createAsyncThunk(
-  "materials/updateMaterial", 
-  async ({ id, materialData }) => {
-    const response = await axios.put(
-      `${API_URL}/api/materials/${id}`,
-      materialData,
-      {
+  "materials/updateMaterial",
+  async ({ id, materialData }, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.put(`${API_URL}/api/materials/${id}`, materialData, {
         headers: {
-          Authorization: USER_TOKEN,
+          Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    return response.data;
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 // Async thunk to delete a material
 export const deleteMaterial = createAsyncThunk(
   "materials/deleteMaterial",
-  async (id) => {
-    await axios.delete(`${API_URL}/api/materials/${id}`, {
-      headers: {
-        Authorization: USER_TOKEN,
-      },
-    });
-    return id;
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      await axios.delete(`${API_URL}/api/materials/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 

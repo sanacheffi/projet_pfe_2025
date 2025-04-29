@@ -11,13 +11,16 @@ const initialGuestId =
   localStorage.getItem("guestId") || `guest_${new Date().getTime()}`;
 localStorage.setItem("guestId", initialGuestId);
 
-// Initial state
+const tokenFromStorage = localStorage.getItem("userToken") || null;
+
 const initialState = {
   user: userFromStorage,
+  token: tokenFromStorage,
   guestId: initialGuestId,
   loading: false,
   error: null,
 };
+
 
 // Async Thunk for User Login
 export const loginUser = createAsyncThunk(
@@ -108,6 +111,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.token = localStorage.getItem("userToken");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = true;

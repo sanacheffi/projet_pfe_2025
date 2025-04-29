@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}`;
-const USER_TOKEN = `Bearer ${localStorage.getItem("userToken")}`;
 
 // Async thunk to submit contact form (Client side)
 export const submitContactForm = createAsyncThunk(
@@ -16,15 +15,21 @@ export const submitContactForm = createAsyncThunk(
 // Async thunk to fetch all contact messages (Admin only)
 export const fetchContactMessages = createAsyncThunk(
   "contact/fetchContactMessages",
-  async () => {
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
       const response = await axios.get(`${API_URL}/api/contacts`, {
         headers: {
-          Authorization: USER_TOKEN,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data || error.message);
+    }
   }
 );
+
 
 const contactSlice = createSlice({
   name: "contact",

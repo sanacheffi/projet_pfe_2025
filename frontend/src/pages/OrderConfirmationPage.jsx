@@ -1,22 +1,26 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { clearCart } from "../redux/slices/cartSlice";
+import { fetchOrderDetails } from "../redux/slices/orderSlice";
+
 
 const OrderConfirmationPage = () => {
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { checkout } = useSelector((state) => state.checkout);
-  const order = checkout?.order;
+  const order = useSelector((state) => state.orders.orderDetails);
 
-  // Clear the cart when the order is confirmed
+
   useEffect(() => {
-    if (order && order._id) {
+    const orderId = searchParams.get("orderId");
+    if (orderId) {
+      dispatch(fetchOrderDetails(orderId));
       dispatch(clearCart());
     } else {
       navigate("/my-orders");
     }
-  }, [order, dispatch, navigate]);
+  }, [dispatch, searchParams]);
 
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
@@ -25,7 +29,7 @@ const OrderConfirmationPage = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white">
+    <div className="max-w-4xl mx-auto p-6 bg-white">
       <h1 className="text-4xl font-bold text-center text-emerald-700 mb-8">
         Merci pour votre commande !
       </h1>

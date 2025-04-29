@@ -42,8 +42,9 @@ const Checkout = () => {
     if (paymentMethod === "Paiement en ligne" && data.paymentLink) {
       window.location.href = data.paymentLink;
     } else if (paymentMethod === "Paiement à la livraison" && data.order) {
-      navigate("/order-confirmation");
+      navigate(`/order-confirmation?orderId=${data.order._id}`);
     }
+    
   };
 
   if (loading) return <p>Chargement du panier...</p>;
