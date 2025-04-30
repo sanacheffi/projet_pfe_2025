@@ -3,17 +3,27 @@ import { FaTrashAlt } from 'react-icons/fa'
 import { IoMdAddCircle } from 'react-icons/io'
 import { MdOutlineModeEditOutline } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { deleteProduct, fetchAdminProducts } from '../../redux/slices/adminProductSlice'
 import Loader from '../Common/Loader'
 
 const ProductManagement = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { user } = useSelector((state) => state.auth);
     const { products, loading, error } = useSelector((state) => state.adminProducts);
   
-    useEffect(() => {
-      dispatch(fetchAdminProducts());
-    }, [dispatch]);
+   useEffect(() => {
+           if (user && user.role !== "admin") {
+             navigate("/");
+           }
+         }, [user, navigate]);
+         
+         useEffect(() => {
+           if (user && user.role === "admin") {
+            dispatch(fetchAdminProducts());
+           }
+         }, [dispatch, user]); 
 
     const handleDelete = (id) => {
         if(window.confirm("Confirmez-vous la suppression de cette article ?")){

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { createCheckout } from '../../redux/slices/checkoutSlice';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [errorMessage, setErrorMessage] = useState('');
   const { cart, loading, error } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
 
@@ -21,6 +23,13 @@ const Checkout = () => {
       navigate("/");
     }
   }, [cart, navigate]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('error') === 'payment_failed') {
+      setErrorMessage('Le paiement a échoué. Veuillez réessayer ou choisir une autre méthode.');
+    }
+  }, [location.search]);
 
   const handleCreateCheckout = async (e) => {
     e.preventDefault();
@@ -55,6 +64,11 @@ const Checkout = () => {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
       {/* Left Section */}
       <div className="bg-white rounded-lg p-6">
+        {errorMessage && (
+          <div className="bg-red-100 text-red-700 p-4 rounded mb-6">
+            {errorMessage}
+          </div>
+        )}
         <h2 className="text-2xl uppercase mb-6">Checkout</h2>
         <form onSubmit={handleCreateCheckout}>
           {/* User Info */}

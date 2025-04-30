@@ -239,7 +239,7 @@ const EditProduct = () => {
                   type="submit"
                   className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
                 >
-                  Ajouter l'article
+                  Mettre à jour
                 </button>
               </form>
             </div>

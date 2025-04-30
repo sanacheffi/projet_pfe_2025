@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     // Registration logic
     let user = await User.findOne({ email });
 
-    if (user) return res.status(400).json({ message: "User already exists" });
+    if (user) return res.status(400).json({ message: "L'adresse e-mail existe déjà" });
 
     user = new User({ firstName, lastName, email, password });
     await user.save();
@@ -55,12 +55,12 @@ router.post("/login", async (req, res) => {
       // Find the user by email
       let user = await User.findOne({ email });
   
-      if (!user) return res.status(400).json({ message: "Invalid Credentials" });
+      if (!user) return res.status(400).json({ message: "Aucun compte trouvé avec cette adresse e-mail" });
   
       const isMatch = await user.matchPassword(password);
   
       if (!isMatch)
-        return res.status(400).json({ message: "Invalid Credentials" });
+        return res.status(400).json({ message: "Mot de passe invalide" });
 
       // Create JWT Payload
       const payload = { user: { id: user._id, role: user.role } };

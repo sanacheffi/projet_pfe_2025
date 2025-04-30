@@ -140,8 +140,8 @@ const ProductDetails = ({ productId }) => {
                 </p>
                 <p className="text-gray-600 mb-2">{selectedProduct.description}</p>
                 {selectedProduct.stock_status && (
-  <p className="mb-8">{getStockStatus()}</p>
-)}
+                  <p className="mb-8">{getStockStatus()}</p>
+                )}
 
                 <div className="mb-6">
                     <p className="text-gray-700">Quantité :</p>

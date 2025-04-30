@@ -49,7 +49,7 @@ const Navbar = () => {
             </Link>
         </div>
         <div className="flex items-center space-x-4">
-            {user && user.role === "admin" && (
+            {user && (user.role === "admin" || user.role === "artisan") && (
                 <Link to="/admin" 
                 className="block bg-black px-2 rounded text-sm text-white">
                     Admin
@@ -81,16 +81,16 @@ const Navbar = () => {
     <div className="p-4">
         <h2 className="text-xl font-semibold mb-4">Menu</h2>
         <nav className="space-y-4">
-            <Link to="#" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
+            <Link to="/collections/all?collection=Meubles Rotin" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
             Meubles Rotin
             </Link>
-            <Link to="#" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
+            <Link to="/collections/all?collection=Luminaires Rotin" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
             Luminaires Rotin
             </Link>
-            <Link to="#" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
+            <Link to="/collections/all?collection=Objets de Décoration" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
             Objets de Décoration 
             </Link>
-            <Link to="#" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
+            <Link to="/collections/all?collection=Décorations Murales" onClick={toggleNavDrawer} className="block text-gray-600 hover:text-black">
             Décorations Murales
             </Link>
         </nav>

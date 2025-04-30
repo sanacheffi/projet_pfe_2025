@@ -10,7 +10,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const {user, guestId, loading} = useSelector((state) => state.auth);
+    const {user, guestId, loading, error} = useSelector((state) => state.auth);
     const {cart} = useSelector((state) => state.cart);
 
 // Get redirect parameter and check if it's checkout or something
@@ -44,6 +44,12 @@ useEffect(() => {
         </div> */}
         <h2 className="text-2xl font-medium uppercase text-center mb-6">Se connecter</h2>
         <p className="text-center mb-6">Entrez votre e-mail et votre mot de passe pour vous connecter.</p>
+        {error && (
+  <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm text-center">
+    {error}
+  </div>
+)}
+
         <div className="mb-4">
             <label className="block text-sm font-semibold mb-2">E-mail</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}

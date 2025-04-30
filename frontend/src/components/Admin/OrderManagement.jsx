@@ -13,7 +13,7 @@ const OrderManagement = () => {
     const { orders, loading, error } = useSelector((state) => state.adminOrders);
 
     useEffect(() => {
-        if (!user || user.role !== "admin") {
+        if (!user && user.role !== "admin" && user.role !== "artisan") {
           navigate("/");
         } else {
           dispatch(fetchAllOrders());

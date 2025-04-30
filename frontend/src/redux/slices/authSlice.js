@@ -114,7 +114,7 @@ const authSlice = createSlice({
         state.token = localStorage.getItem("userToken");
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.error = action.payload.message;
       })
       .addCase(registerUser.pending, (state) => {
@@ -126,7 +126,7 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.error = action.payload.message;
       })
       .addCase(updateUserProfile.pending, (state) => {

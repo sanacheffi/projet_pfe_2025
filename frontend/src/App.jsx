@@ -31,6 +31,7 @@ import OrderDetailsAdmin from './components/Admin/OrderDetailsAdmin'
 import MaterialManagement from './components/Admin/MaterialManagement'
 import AddMaterial from './components/Admin/AddMaterial'
 import EditMaterial from './components/Admin/EditMaterial'
+import BrandHistoryPage from './pages/BrandHistoryPage'
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
       <Route path="register" element={<Register/>}/>
       <Route path="profile" element={<Profile/>}/>
       <Route path="contact" element={<ContactPage/>}/>
+      <Route path="history" element={<BrandHistoryPage/>}/>
       <Route path="collections/:collection" element={<CollectionPage/>}/>
       <Route path="product/:id" element={<ProductDetails/>}/>
       <Route path="checkout" element={<Checkout/>}/>
@@ -54,7 +56,7 @@ const App = () => {
       <Route path="profile-management" element={<ProfileManagement/>}/>
       </Route>
       {/* admin layout */}
-      <Route path="/admin" element={<ProtectedRoute role="admin"> <AdminLayout/> </ProtectedRoute>}>
+      <Route path="/admin" element={<ProtectedRoute roles={["admin", "artisan"]}> <AdminLayout/> </ProtectedRoute>}>
       <Route index element={<AdminHomePage/>}/>
       <Route path="users" element={<UserManagement/>}/>
       <Route path="users/add" element={<AddUser/>}/>

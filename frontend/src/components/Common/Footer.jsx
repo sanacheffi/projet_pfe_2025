@@ -24,13 +24,16 @@ const Footer = () => {
           <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
-              <Link to="#" className="hover:text-gray-500 transition-colors">link</Link>
+              <Link to="/collections/all?collection=Meubles Rotin" className="hover:text-gray-500 transition-colors">Meubles Rotin</Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-500 transition-colors">link</Link>
+              <Link to="/collections/all?collection=Luminaires Rotin" className="hover:text-gray-500 transition-colors">Luminaires Rotin</Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-500 transition-colors">link</Link>
+              <Link to="/collections/all?collection=Objets de Décoration" className="hover:text-gray-500 transition-colors">Objets de Décoration</Link>
+            </li>
+            <li>
+              <Link to="/collections/all?collection=Décorations Murales" className="hover:text-gray-500 transition-colors">Décorations Murales</Link>
             </li>
           </ul>
         </div>

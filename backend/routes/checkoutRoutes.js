@@ -86,7 +86,7 @@ router.post("/", protect, async (req, res) => {
         accept_card: "true",
         session_timeout_secs: 1200,
         success_link: `http://localhost:9000/api/checkout/${newCheckout._id}/success`,
-        fail_link: `http://localhost:9000/api/checkout/${newCheckout._id}/fail`,
+        fail_link: `http://localhost:5173/checkout?error=payment_failed`,
         developer_tracking_id: "ae55482e-1b66-4658-9ac6-1d752db05c35",
       };
       const flouciResponse = await axios.post(

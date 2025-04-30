@@ -10,11 +10,12 @@ const AddMaterial = () => {
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
     
-      useEffect(() => {
-        if (user && user.role !== "admin") {
-          navigate("/");
-        }
-      }, [user, navigate]);
+    useEffect(() => {
+      if (user && user.role !== "admin" && user.role !== "artisan") {
+        navigate("/");
+      }
+    }, [user, navigate]);
+    
 
   const [materialData, setMaterialData] = useState({
     name: '',
