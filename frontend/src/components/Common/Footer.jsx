@@ -74,7 +74,7 @@ const Footer = () => {
           </p>
           <p>
             <FiMail className="inline-block mr-2"/>
-            sanacheffi4@gmail.com
+            artisanatcheffi@gmail.com
           </p>
           </div> 
         </div>

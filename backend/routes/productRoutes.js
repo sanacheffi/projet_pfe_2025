@@ -182,6 +182,18 @@ router.get("/new-arrivals", async (req, res) => {
   }
 });
 
+// @route GET /api/products/all
+// @desc Get all products without any filter
+// @access Public
+router.get("/all", async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route GET /api/products/:id
 // @desc Get a single product by ID

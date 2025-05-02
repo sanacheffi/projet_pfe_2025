@@ -32,6 +32,7 @@ import MaterialManagement from './components/Admin/MaterialManagement'
 import AddMaterial from './components/Admin/AddMaterial'
 import EditMaterial from './components/Admin/EditMaterial'
 import BrandHistoryPage from './pages/BrandHistoryPage'
+import DevisFormPage from './pages/DevisFormPage'
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
       <Route path="profile" element={<Profile/>}/>
       <Route path="contact" element={<ContactPage/>}/>
       <Route path="history" element={<BrandHistoryPage/>}/>
+      <Route path="devis" element={<DevisFormPage/>}/>
       <Route path="collections/:collection" element={<CollectionPage/>}/>
       <Route path="product/:id" element={<ProductDetails/>}/>
       <Route path="checkout" element={<Checkout/>}/>

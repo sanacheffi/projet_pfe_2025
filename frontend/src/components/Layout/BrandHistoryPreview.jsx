@@ -1,29 +1,35 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import AC3 from "../../assets/AC3.jpg"
+import ArtisanatCheffi from "../../assets/ArtisanatCheffi.jpg"
 
 const BrandHistoryPreview = () => {
-    return (
-        <section className="py-16 px-4 lg:px-0">
-            <div className="container mx-auto flex flex-col-reverse md:flex-row items-center bg-[#dbb47e] rounded-3xl">
-                <div className="lg:w-1/2 p-8 text-center md:text-left">
-                <h2 className="text-lg font-semibold text-white mb-2">
-                    Notre Histoire
-                </h2>
-                <h2 className="Artisanat text-4xl lg:text-5xl text-white font-bold mb-6">
-                Artisanat Cheffi
-                </h2>
-                <p className="text-lg text-white mb-6">Un savoir-faire artisanal transmis de génération en génération. </p>
-                <Link to="/history" className="bg-white text-gray-950 px-6 py-2 rounded-md text-sm">
-                Découvrez plus
-                    </Link>
-                </div>
-                <div className="lg:w-1/2 w-full h-full">
-                <img src={AC3} alt="notrehistoire" className="w-full h-full object-cover rounded-t-3xl md:rounded-none md:rounded-tr-3xl md:rounded-br-3xl"/>
-                </div>
-            </div>
-        </section>
-    )
+  return (
+    <div className="flex flex-col md:flex-row items-center justify-between bg-white py-16 px-8 lg:px-24">
+      {/* Left Content */}
+      <div className="max-w-xl text-center md:text-left">
+        <h1 className="text-4xl Artisanat sm:text-5xl">
+          Artisanat Cheffi
+        </h1>
+        <p className="mt-6 text-lg leading-8 text-gray-600">
+          Un savoir-faire artisanal transmis de génération en génération. <br />
+          Nos meubles, luminaires et objets en rotin incarnent l’élégance naturelle et la durabilité. <br />
+        </p>
+        <div className="mt-8">
+          <a href="/history" className="text-sm font-semibold text-gray-900 hover:underline">
+            En savoir plus <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Right Image - only visible on large screens */}
+      <div className="hidden md:block w-1/2 mt-12 md:mt-0">
+        <img
+          src={ArtisanatCheffi}
+          alt="Artisanat Cheffi"
+          className="w-full h-auto rounded-lg object-cover"
+        />
+      </div>
+    </div>
+  );
 }
 
-export default BrandHistoryPreview
+export default BrandHistoryPreview;
