@@ -14,8 +14,8 @@ router.post("/", protect, admin, async (req, res) => {
         description, 
         price,
         countInStock, 
-        collectionName,
         category,
+        subCategory,
         stock_status,
         dimensions,
         material, 
@@ -27,8 +27,8 @@ router.post("/", protect, admin, async (req, res) => {
         description, 
         price,
         countInStock, 
-        collectionName,
         category,
+        subCategory,
         stock_status,
         dimensions,
         material, 
@@ -56,8 +56,8 @@ router.put("/:id", protect, admin, async (req, res) => {
             description, 
             price,
             countInStock, 
-            collectionName,
             category,
+            subCategory,
             stock_status,
             dimensions,
             material, 
@@ -72,8 +72,8 @@ router.put("/:id", protect, admin, async (req, res) => {
             product.description = description || product.description;
             product.price = price || product.price;
             product.countInStock = countInStock || product.countInStock;
-            product.collectionName = collectionName || product.collectionName;
             product.category = category || product.category;
+            product.subCategory = subCategory || product.subCategory;
             product.stock_status = stock_status || product.stock_status;
             product.dimensions = dimensions || product.dimensions;
             product.material = material || product.material;
@@ -114,22 +114,22 @@ router.delete("/:id", protect, admin, async (req, res) => {
 
 
 // @route GET /api/products
-// @desc Get products by collection and optionally category
+// @desc Get products by category and optionally subCategory
 // @access Public
 router.get("/", async (req, res) => {
   try {
-    const { collection, category, sortBy, search } = req.query;
+    const { category, subCategory, sortBy, search } = req.query;
 
     const query = {};
     let sort = {}; 
     
     // Filter logic
-if (collection && collection.toLocaleLowerCase() != "all") {
-  query.collectionName = collection;
-}
-
 if (category && category.toLocaleLowerCase() != "all") {
   query.category = category;
+}
+
+if (subCategory && subCategory.toLocaleLowerCase() != "all") {
+  query.subCategory = subCategory;
 }
 
     // Sort Logic
@@ -213,7 +213,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // @route GET /api/products/similar/:id
-// @desc Retrieve similar products based on the current product's collectionName
+// @desc Retrieve similar products based on the current product's category
 // @access Public
 router.get("/similar/:id", async (req, res) => {
   const { id } = req.params;
@@ -227,7 +227,7 @@ router.get("/similar/:id", async (req, res) => {
 
     const similarProducts = await Product.find({
       _id: { $ne: id }, // Exclude the current product ID
-      collectionName: product.collectionName,
+      category: product.category,
     }).limit(4);
 
     res.json(similarProducts);

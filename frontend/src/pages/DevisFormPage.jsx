@@ -15,8 +15,10 @@ const DevisFormPage = () => {
     phone: '',
     company: '',
     description: '',
-    address: '',
+    country: '',
     city: '',
+    address: '',
+    postalCode: '',
     date: '',
   });
 
@@ -54,10 +56,6 @@ const DevisFormPage = () => {
     <div className="max-w-4xl mx-auto py-10 px-6 tracking-tighter">
       <div className="bg-white rounded-lg p-6 shadow-lg">
         <h2 className="text-2xl uppercase mb-6 text-center">Demander un devis</h2>
-
-        {loading && <p className="text-center text-gray-500">Chargement des produits...</p>}
-        {error && <p className="text-center text-red-500">{error}</p>}
-
         {!submitted ? (
           <form onSubmit={handleSubmit}>
             <div className="mb-4 flex flex-col md:flex-row gap-4">
@@ -91,7 +89,8 @@ const DevisFormPage = () => {
             </div>
 
             {/* Email */}
-            <div className="mb-4">
+            <div className="mb-4 flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Email</label>
               <input
                 type="email"
@@ -105,7 +104,7 @@ const DevisFormPage = () => {
             </div>
 
             {/* Téléphone */}
-            <div className="mb-4">
+            <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Téléphone</label>
               <input
                 type="text"
@@ -116,6 +115,7 @@ const DevisFormPage = () => {
                 className="w-full p-2 border rounded"
                 required
               />
+            </div>
             </div>
 
             {/* Entreprise */}
@@ -187,6 +187,20 @@ const DevisFormPage = () => {
               />
             </div>
             <div className="mb-4 flex flex-col md:flex-row gap-4">
+            
+            {/* Pays */}
+            <div className="w-full md:w-1/2">
+              <label className="block text-gray-700">Pays</label>
+              <input
+                type="text"
+                value={devisData.country}
+                onChange={(e) =>
+                  setDevisData({ ...devisData, country: e.target.value })
+                }
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
             {/* ville */}
             <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Ville</label>
@@ -200,6 +214,8 @@ const DevisFormPage = () => {
                 required
               />
             </div>
+            </div>
+            <div className="mb-4 flex flex-col md:flex-row gap-4">
             
             {/* Adresse */}
             <div className="w-full md:w-1/2">
@@ -209,6 +225,19 @@ const DevisFormPage = () => {
                 value={devisData.address}
                 onChange={(e) =>
                   setDevisData({ ...devisData, address: e.target.value })
+                }
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            {/* Code Postal */}
+            <div className="w-full md:w-1/2">
+              <label className="block text-gray-700">Code Postal</label>
+              <input
+                type="text"
+                value={devisData.postalCode}
+                onChange={(e) =>
+                  setDevisData({ ...devisData, postalCode: e.target.value })
                 }
                 className="w-full p-2 border rounded"
                 required

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async Thunk to Fetch Products by Collection and optional Filters
+// Async Thunk to Fetch Products by category and optional Filters
 export const fetchProductsByFilters = createAsyncThunk(
   "products/fetchByFilters",
-  async ({ collection, category, sortBy, search }) => {
+  async ({ category, subCategory, sortBy, search }) => {
     const query = new URLSearchParams();
-    if (collection) query.append("collection", collection);
     if (category) query.append("category", category);
+    if (subCategory) query.append("subCategory", subCategory);
     if (sortBy) query.append("sortBy", sortBy);
     if (search) query.append("search", search);
 
@@ -77,8 +77,8 @@ const productsSlice = createSlice({
     loading: false,
     error: null,
     filters: {
-      collection: "",
       category: "",
+      subCategory: "",
       sortBy: "",
       search: "",
     },
@@ -89,8 +89,8 @@ const productsSlice = createSlice({
     },
     clearFilters: (state) => {
       state.filters = {
-        collection: "",
         category: "",
+        subCategory: "",
         sortBy: "",
         search: "",
       };

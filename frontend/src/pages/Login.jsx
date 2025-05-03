@@ -14,20 +14,20 @@ const Login = () => {
     const {cart} = useSelector((state) => state.cart);
 
 // Get redirect parameter and check if it's checkout or something
-const redirect = new URLSearchParams(location.search).get("redirect") || "/";
+const redirect = "/" + (new URLSearchParams(location.search).get("redirect") || "");
 const isCheckoutRedirect = redirect.includes("checkout");
 
 useEffect(() => {
   if (user) {
     if (cart?.products.length > 0 && guestId) {
       dispatch(mergeCart({ guestId, user })).then(() => {
-        navigate(isCheckoutRedirect ? "/checkout" : "/");
+        navigate(redirect);
       });
     } else {
-      navigate(isCheckoutRedirect ? "/checkout" : "/");
+      navigate(redirect);
     }
   }
-}, [user, guestId, cart, navigate, isCheckoutRedirect, dispatch]);
+}, [user, guestId, cart, navigate, redirect, dispatch]);
 
 
     const handleSubmit = (e) => {

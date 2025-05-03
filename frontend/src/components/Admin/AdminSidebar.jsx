@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/slices/authSlice';
 import { clearCart } from '../../redux/slices/cartSlice';
+import { ImList } from 'react-icons/im';
 
 const AdminSidebar = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,24 @@ const AdminSidebar = () => {
                   : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
               <FaBoxOpen />
               <span>Articles</span>
+            </NavLink>
+            <NavLink 
+              to="/admin/categories"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+              <ImList />
+              <span>Catégories</span>
+            </NavLink>
+            <NavLink 
+              to="/admin/subcategories"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+              <ImList />
+              <span>Sous-catégories</span>
             </NavLink>
 
             <NavLink 

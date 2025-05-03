@@ -22,7 +22,6 @@ import ReclamationManagement from './components/Admin/ReclamationManagement'
 import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import MyOrdersPage from './pages/MyOrdersPage'
-
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import ProtectedRoute from './components/Common/ProtectedRoute'
@@ -33,6 +32,8 @@ import AddMaterial from './components/Admin/AddMaterial'
 import EditMaterial from './components/Admin/EditMaterial'
 import BrandHistoryPage from './pages/BrandHistoryPage'
 import DevisFormPage from './pages/DevisFormPage'
+import CategoryManagement from './components/Admin/CategoryManagement'
+import SubCategoryManagement from './components/Admin/SubCategoryManagement'
 
 const App = () => {
   return (
@@ -49,7 +50,7 @@ const App = () => {
       <Route path="contact" element={<ContactPage/>}/>
       <Route path="history" element={<BrandHistoryPage/>}/>
       <Route path="devis" element={<DevisFormPage/>}/>
-      <Route path="collections/:collection" element={<CollectionPage/>}/>
+      <Route path="collections/:category" element={<CollectionPage/>}/>
       <Route path="product/:id" element={<ProductDetails/>}/>
       <Route path="checkout" element={<Checkout/>}/>
       <Route path="order-confirmation" element={<OrderConfirmationPage/>}/>
@@ -65,6 +66,8 @@ const App = () => {
       <Route path="products" element={<ProductManagement/>}/>
       <Route path="products/add" element={<AddProduct/>}/>
       <Route path="products/:id/edit" element={<EditProduct/>}/>
+      <Route path="categories" element={<CategoryManagement/>}/>
+      <Route path="subcategories" element={<SubCategoryManagement/>}/>
       <Route path="orders" element={<OrderManagement/>}/>
       <Route path="orders/:orderId" element={<OrderDetailsAdmin/>}/>
       <Route path="reclamation" element={<ReclamationManagement/>}/>

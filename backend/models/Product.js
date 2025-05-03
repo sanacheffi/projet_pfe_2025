@@ -19,11 +19,11 @@ const productSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  collectionName: {
+  category: {
     type: String,
     required: true
   },
-  category: {
+  subCategory: {
     type: String,
     required: true
   },

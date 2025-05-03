@@ -20,8 +20,8 @@ const AddProduct = () => {
             description: "",
             price: 0,
             countInStock: 0,
-            collectionName: "",
             category: "",
+            subCategory: "",
             stock_status:"en_stock",
             dimensions: "",
             material: "",
@@ -72,8 +72,8 @@ const AddProduct = () => {
                       description: "",
                       price: 0,
                       countInStock: 0,
-                      collectionName: "",
                       category: "",
+                      subCategory: "",
                       stock_status:"en_stock",
                       dimensions: "",
                       material: "",
@@ -139,12 +139,12 @@ const AddProduct = () => {
             </div>
 
             <div className="mb-6 flex flex-wrap gap-4">
-            {/* Collection */}
+            {/* Catégories */}
             <div className="flex-1 min-w-[200px]">
-              <label className="block font-semibold mb-2">Collection</label>
+              <label className="block font-semibold mb-2">Catégorie</label>
               <select
-                name="collectionName"
-                value={productData.collectionName}
+                name="category"
+                value={productData.category}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md p-2"
               >
@@ -155,12 +155,12 @@ const AddProduct = () => {
               </select>
             </div>
 
-            {/* Catégories */}
+            {/* sous-Catégories */}
             <div className="flex-1 min-w-[200px]">
-              <label className="block font-semibold mb-2">Catégorie</label>
+              <label className="block font-semibold mb-2">Sous-catégories</label>
               <select
-                name="category"
-                value={productData.category}
+                name="subCategory"
+                value={productData.subCategory}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md p-2"
               >

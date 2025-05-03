@@ -1,7 +1,18 @@
 import React from 'react';
 import AC3 from "../../assets/AC3.jpg";
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const DevisFormPreview = () => {
+  const navigate = useNavigate();
+  const {user} = useSelector((state) => state.auth);
+  const handleClick = () => {
+    if (!user) {
+      navigate("/login?redirect=devis");
+    } else {
+      navigate("/devis");
+    }
+  };
   return (
     <div className="bg-white py-24 sm:py-32 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -16,12 +27,11 @@ const DevisFormPreview = () => {
               Nous sommes à votre écoute pour répondre à vos besoins spécifiques et vous proposer un devis adapté.
             </p>
             <div className="mt-8">
-              <a
-                href="/devis"
-                className="rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 inline-block"
-              >
-                Demander un devis
-              </a>
+            <button 
+        onClick={handleClick}
+        className="bg-black text-white py-3 px-3 rounded-lg font-semibold hover:bg-gray-800 transition">
+          Demander un devis
+        </button>
             </div>
           </div>
 
