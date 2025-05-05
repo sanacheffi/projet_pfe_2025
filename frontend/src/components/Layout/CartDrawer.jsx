@@ -34,6 +34,10 @@ const CartDrawer = ({drawerOpen, toggleCartDrawer}) => {
         )}
       </div>
       <div className="p-4 bg-white sticky bottom-0">
+        <div className="flex justify-between items-center text-base font-semibold mb-3">
+          <p className="uppercase">Total</p>
+          <p className="text-lg">{cart.totalPrice ? cart.totalPrice.toFixed(3) : "0.000"} DT</p>
+        </div>
       {cart && cart?.products.length > 0 && (
         <>
         <button 
@@ -41,9 +45,6 @@ const CartDrawer = ({drawerOpen, toggleCartDrawer}) => {
         className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
           Commander
         </button>
-        <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
-        shipping calculated at checkout.
-        </p>
         </>
       )}
         

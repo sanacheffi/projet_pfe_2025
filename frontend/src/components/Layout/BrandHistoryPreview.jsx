@@ -21,11 +21,11 @@ const BrandHistoryPreview = () => {
       </div>
 
       {/* Right Image - only visible on large screens */}
-      <div className="hidden md:block w-1/2 mt-12 md:mt-0">
+      <div className="hidden md:block mt-12 md:mt-0 h-96 w-96">
         <img
           src={ArtisanatCheffi}
           alt="Artisanat Cheffi"
-          className="w-full h-auto rounded-lg object-cover"
+          className="w-full h-full rounded-md object-cover"
         />
       </div>
     </div>

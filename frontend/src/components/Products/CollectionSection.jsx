@@ -19,7 +19,7 @@ const CollectionSection = () => {
           Explorez Nos Collections
         </h2>
         <p className="text-lg text-gray-600 mb-8">
-          Découvrir les créations artisanales récentes d'Artisanat Cheffi, mêlant tradition et modernité.
+        Découvrez les créations artisanales d'Artisanat Cheffi, mêlant tradition et modernité.
         </p>
       </div>
 

@@ -54,7 +54,7 @@ const NewArrivals = () => {
             Explorer Les Nouveaux Articles
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-            Découvrir les créations artisanales récentes d'Artisanat Cheffi, mêlant tradition et modernité.
+            Découvrez les créations les plus récentes d'Artisanat Cheffi.
             </p>
 
             <div className="absolute right-0 bottom-[-35px] flex space-x-2">

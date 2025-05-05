@@ -180,7 +180,7 @@ const Checkout = () => {
         </div>
         <div className="flex justify-between items-center text-lg">
           <p>Expédition</p>
-          <p>Free</p>
+          <p>Gratuite</p>
         </div>
         <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
           <p>Total</p>
