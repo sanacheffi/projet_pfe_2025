@@ -50,7 +50,7 @@ const NewArrivals = () => {
   return (
     <section className="py-10 px-4 lg:px-0">
         <div className="container mx-auto text-center mb-10 relative">
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-medium uppercase mb-4">
             Explorer Les Nouveaux Articles
             </h2>
             <p className="text-lg text-gray-600 mb-8">

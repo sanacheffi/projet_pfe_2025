@@ -32,10 +32,10 @@ export const fetchSubCategoryById = createAsyncThunk(
 // Create a subcategory
 export const createSubCategory = createAsyncThunk(
   'subcategories/create',
-  async (data, { getState, rejectWithValue }) => {
+  async (subCategoryData, { getState, rejectWithValue }) => {
     const { token } = getState().auth;
     try {
-      const response = await axios.post(`${API_URL}/api/subcategories`, data, {
+      const response = await axios.post(`${API_URL}/api/subcategories`, subCategoryData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -48,10 +48,10 @@ export const createSubCategory = createAsyncThunk(
 // Update a subcategory
 export const updateSubCategory = createAsyncThunk(
     'subcategories/update',
-    async ({ id, data }, { getState, rejectWithValue }) => {
+    async ({ id, subCategoryData }, { getState, rejectWithValue }) => {
       const { token } = getState().auth;
       try {
-        const response = await axios.put(`${API_URL}/api/subcategories/${id}`, data, {
+        const response = await axios.put(`${API_URL}/api/subcategories/${id}`, subCategoryData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         return response.data;

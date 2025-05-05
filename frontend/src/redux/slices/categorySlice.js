@@ -32,10 +32,10 @@ export const fetchCategoryById = createAsyncThunk(
 // Create a new category
 export const createCategory = createAsyncThunk(
   'categories/create',
-  async (data, { getState, rejectWithValue }) => {
+  async (categoryData, { getState, rejectWithValue }) => {
     const { token } = getState().auth;
     try {
-      const response = await axios.post(`${API_URL}/api/categories`, data, {
+      const response = await axios.post(`${API_URL}/api/categories`, categoryData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -48,10 +48,10 @@ export const createCategory = createAsyncThunk(
 // Update a category
 export const updateCategory = createAsyncThunk(
     'categories/update',
-    async ({ id, data }, { getState, rejectWithValue }) => {
+    async ({ id, categoryData }, { getState, rejectWithValue }) => {
       const { token } = getState().auth;
       try {
-        const response = await axios.put(`${API_URL}/api/categories/${id}`, data, {
+        const response = await axios.put(`${API_URL}/api/categories/${id}`, categoryData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         return response.data;

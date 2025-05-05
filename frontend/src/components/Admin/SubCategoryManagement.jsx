@@ -57,7 +57,7 @@ const SubCategoryManagement = () => {
                         <tr key={subCategorie._id} className="border-b hover:bg-gray-50 cursor-pointer">
                             <td className="p-4 font-medium text-gray-900 whitespace-nowrap">{subCategorie.name}</td>
                             <td className="p-4 font-medium text-gray-900 whitespace-nowrap">{subCategorie.category?.name || 'Non défini'}</td>
-                            <td className="text-center">
+                            <td className="text-center p-4">
                                 <div className="flex flex-row  items-center justify-center gap-2">
                                     <Link 
                                     to={`/admin/subcategories/${subCategorie._id}/edit`}
@@ -72,7 +72,7 @@ const SubCategoryManagement = () => {
                         </tr>
                     )) : (<tr>
                         <td colSpan={3} className="p-4 text-center text-gray-500">
-                        Aucune sous-catégorie trouvé.
+                        Aucune sous-catégorie trouvée.
                         </td>
                     </tr>)}
                 </tbody>

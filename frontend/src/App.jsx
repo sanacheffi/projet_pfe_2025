@@ -34,6 +34,10 @@ import BrandHistoryPage from './pages/BrandHistoryPage'
 import DevisFormPage from './pages/DevisFormPage'
 import CategoryManagement from './components/Admin/CategoryManagement'
 import SubCategoryManagement from './components/Admin/SubCategoryManagement'
+import EditCategory from './components/Admin/EditCategory'
+import AddCategory from './components/Admin/AddCategory'
+import AddSubCategory from './components/Admin/AddSubCategory'
+import EditSubCategory from './components/Admin/EditSubCategory'
 
 const App = () => {
   return (
@@ -67,7 +71,11 @@ const App = () => {
       <Route path="products/add" element={<AddProduct/>}/>
       <Route path="products/:id/edit" element={<EditProduct/>}/>
       <Route path="categories" element={<CategoryManagement/>}/>
+      <Route path="categories/add" element={<AddCategory/>}/>
+      <Route path="categories/:id/edit" element={<EditCategory/>}/>
       <Route path="subcategories" element={<SubCategoryManagement/>}/>
+      <Route path="subcategories/add" element={<AddSubCategory/>}/>
+      <Route path="subcategories/:id/edit" element={<EditSubCategory/>}/>
       <Route path="orders" element={<OrderManagement/>}/>
       <Route path="orders/:orderId" element={<OrderDetailsAdmin/>}/>
       <Route path="reclamation" element={<ReclamationManagement/>}/>

@@ -22,7 +22,7 @@ const MyOrdersPage = () => {
     navigate(`/order/${orderId}`);
   };
 
-  if (loading) return <Loader color="#dbb47e" />;
+  if (loading) return <Loader color="#cead8e" />;
   if (error) return <p>Error: {error}</p>;
 
   

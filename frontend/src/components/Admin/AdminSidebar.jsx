@@ -1,11 +1,10 @@
 import React from 'react';
 import { BsChatSquareTextFill } from 'react-icons/bs';
-import { FaBoxOpen, FaClipboardList, FaSignOutAlt, FaStore, FaTools, FaUser } from 'react-icons/fa';
+import { FaBoxOpen, FaClipboardList, FaSignOutAlt, FaSitemap, FaStore, FaTags, FaTools, FaUser } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/slices/authSlice';
 import { clearCart } from '../../redux/slices/cartSlice';
-import { ImList } from 'react-icons/im';
 
 const AdminSidebar = () => {
   const dispatch = useDispatch();
@@ -53,7 +52,7 @@ const AdminSidebar = () => {
                 isActive
                   ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
-              <ImList />
+              <FaTags />
               <span>Catégories</span>
             </NavLink>
             <NavLink 
@@ -62,7 +61,7 @@ const AdminSidebar = () => {
                 isActive
                   ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
                   : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
-              <ImList />
+              <FaSitemap />
               <span>Sous-catégories</span>
             </NavLink>
 

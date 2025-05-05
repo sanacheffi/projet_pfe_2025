@@ -15,7 +15,7 @@ const CollectionSection = () => {
   return (
     <section className="py-16 px-4 lg:px-0">
       <div className="container mx-auto text-center mb-10 relative">
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-medium uppercase mb-4">
           Explorez Nos Collections
         </h2>
         <p className="text-lg text-gray-600 mb-8">
@@ -23,7 +23,7 @@ const CollectionSection = () => {
         </p>
       </div>
 
-      {loading && <Loader color="#dbb47e" />}
+      {loading && <Loader color="#cead8e" />}
       {error && <p className="text-center text-red-500">Erreur: {error}</p>}
 
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4 lg:grid-cols-4">
@@ -35,7 +35,7 @@ const CollectionSection = () => {
               className="w-full h-[300px] object-cover"
             />
             <div className="absolute bottom-5 left-5 bg-white bg-opacity-90 p-4">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">
+              <h2 className="text-lg font-medium text-gray-900 mb-3">
                 {categorie.name}
               </h2>
               <Link to={`/collections/all?category=${encodeURIComponent(categorie.name)}`} className="text-gray-900 underline">

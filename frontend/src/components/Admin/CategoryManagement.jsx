@@ -13,12 +13,6 @@ const CategoryManagement = () => {
     const { user } = useSelector((state) => state.auth);
     const { categories, loading, error } = useSelector((state) => state.category);
   
-   useEffect(() => {
-           if (user && user.role !== "admin") {
-             navigate("/");
-           }
-         }, [user, navigate]);
-         
          useEffect(() => {
            if (user && user.role === "admin") {
             dispatch(fetchCategories());
@@ -60,7 +54,7 @@ const CategoryManagement = () => {
                              className="w-32 h-32 object-cover rounded-lg" />
                             </td>
                             <td className="p-4 font-medium text-gray-900 whitespace-nowrap">{categorie.name}</td>
-                            <td className="text-center">
+                            <td className="text-center p-4">
                                 <div className="flex flex-row  items-center justify-center gap-2">
                                     <Link 
                                     to={`/admin/categories/${categorie._id}/edit`}
@@ -75,7 +69,7 @@ const CategoryManagement = () => {
                         </tr>
                     )) : (<tr>
                         <td colSpan={3} className="p-4 text-center text-gray-500">
-                        Aucune catégorie trouvé.
+                        Aucune catégorie trouvée.
                         </td>
                     </tr>)}
                 </tbody>

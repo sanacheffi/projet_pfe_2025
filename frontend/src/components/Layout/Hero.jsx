@@ -1,27 +1,49 @@
-import React from 'react'
-import AC2 from "../../assets/AC2.jpg"
-import { Link } from 'react-router-dom'
+import React from 'react';
+import HP1 from "../../assets/HP1.jpg";
+import HP2 from "../../assets/HP2.jpg";
+import HP3 from "../../assets/HP3.jpg";
+import HP4 from "../../assets/HP4.jpg";
+import { Link } from 'react-router-dom';
+
 const Hero = () => {
   return (
-    <section className="relative">
-        <img src={AC2} alt="AC" 
-        className="w-full h-[400px] md:h-[600px]  object-cover"/>
-        <div className="absolute inset-0 bg-black  bg-opacity-5 flex items-center justify-start">
-            <div className="text-start text-white p-6">
-                <h1 className="Artisanat text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-4">
-                    Artisanat <br/> Cheffi
-                </h1>
-                <p className="text-sm tracking-tighter md:text-lg mb-6">
-                Un savoir-faire artisanal transmis de génération en génération.
-                </p>
-                <Link to="/collections/all" className="bg-white text-gray-950 px-6 py-2 rounded-md text-sm">
-                Je Découvre
-                </Link>
-            </div>
-        </div>
-    </section>
-    
-  )
-}
+    <section className="flex flex-col md:flex-row-reverse items-center justify-between px-8 py-8 bg-white">
 
-export default Hero
+      {/* Image Grid - Responsive adjustments */}
+      <div className="grid grid-cols-2 gap-3 md:gap-4 w-full md:max-w-2xl mb-8 md:mb-0">
+        <div className="overflow-hidden shadow-md aspect-[3/2]"> 
+          <img src={HP1} className="w-full h-full object-cover" alt="Artisanat Cheffi product" />
+        </div>
+        <div className="overflow-hidden shadow-md aspect-[3/2]">
+          <img src={HP2} className="w-full h-full object-cover" alt="Artisanat Cheffi product" />
+        </div>
+        <div className="overflow-hidden shadow-md aspect-[3/2]">
+          <img src={HP3} className="w-full h-full object-cover" alt="Artisanat Cheffi product" />
+        </div>
+        <div className="overflow-hidden shadow-md aspect-[3/2]">
+          <img src={HP4} className="w-full h-full object-cover" alt="Artisanat Cheffi product" />
+        </div>
+      </div>
+
+      {/* Text Section */}
+      <div className="max-w-xl text-center md:text-left">
+        <h1 className="Artisanat text-4xl lg:text-6xl mb-6 md:mb-8">
+          Artisanat Cheffi
+        </h1>
+        <p className="text-gray-500 lg:text-lg leading-8 mt-4 md:mt-6">
+          Un savoir-faire artisanal transmis de génération en génération façonné à la main avec passion et précision.
+        </p>
+        <div className="flex gap-4 mt-6 md:mt-8 justify-center md:justify-start">
+          <Link
+            to="/collections/all"
+            className="border border-black text-black px-6 py-3 rounded hover:bg-gray-100 transition"
+          >
+            Voir tous les produits
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;

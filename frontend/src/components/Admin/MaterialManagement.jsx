@@ -69,7 +69,7 @@ const MaterialManagement = () => {
                         </tr>
                     )) : (<tr>
                         <td colSpan={6} className="p-4 text-center text-gray-500">
-                        Aucun matière trouvé.
+                        Aucune matière trouvée.
                         </td>
                     </tr>)}
                 </tbody>
