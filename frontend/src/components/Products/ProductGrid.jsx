@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Common/Loader';
 
 const ProductGrid = ({ products, loading, error }) => {
-  if (loading) return <Loader color="#cead8e" />;
+  if (loading) return <Loader color="#cca78a" />;
   if (error) return <p>Error: {error}</p>;
 
   if (!loading && products.length === 0) {

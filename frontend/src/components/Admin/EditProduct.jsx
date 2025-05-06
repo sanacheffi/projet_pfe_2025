@@ -92,6 +92,10 @@ const EditProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (productData.images.length === 0) {
+      alert("Veuillez importer au moins une image.");
+      return;
+    }
     dispatch(updateProduct({ id, productData }));
     navigate("/admin/products");
   };
@@ -164,6 +168,7 @@ const EditProduct = () => {
               value={productData.category}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md p-2"
+              required
             >
               {categories.map((cat) => (
                 <option key={cat._id} value={cat.name}>
@@ -181,6 +186,7 @@ const EditProduct = () => {
               value={productData.subCategory}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md p-2"
+              required
             >
               {subCategories.map((sub) => (
                 <option key={sub._id} value={sub.name}>
@@ -199,6 +205,7 @@ const EditProduct = () => {
             value={productData.stock_status}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-md p-2"
+            required
           >
             <option value="en_stock">En stock</option>
             <option value="rupture_de_stock">Rupture de stock</option>

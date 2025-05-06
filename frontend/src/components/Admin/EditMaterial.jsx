@@ -67,6 +67,10 @@ const EditMaterial = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (materialData.images.length === 0) {
+      alert("Veuillez importer au moins une image.");
+      return;
+    }
     dispatch(updateMaterial({ id, materialData }));
     navigate('/admin/materials');
   };
@@ -100,6 +104,7 @@ const EditMaterial = () => {
             value={materialData.supplier}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-md p-2"
+            required
           />
         </div>
 

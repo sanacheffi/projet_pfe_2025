@@ -13,7 +13,7 @@ const OrderDetailsPage = () => {
     dispatch(fetchOrderDetails(id));
   }, [dispatch, id]);
 
-  if (loading) return <Loader color="#cead8e" />;
+  if (loading) return <Loader color="#cca78a" />;
   if (error) return <p>Error: {error}</p>;
 
 

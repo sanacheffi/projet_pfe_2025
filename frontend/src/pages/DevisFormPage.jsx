@@ -50,7 +50,7 @@ const DevisFormPage = () => {
     console.log(dataToSubmit);
     setSubmitted(true);
   };
-  if (loading) return <Loader color="#cead8e" />;
+  if (loading) return <Loader color="#cca78a" />;
   if (error) return <p>Error: {error}</p>;
   return (
     <div className="max-w-4xl mx-auto py-10 px-6 tracking-tighter">

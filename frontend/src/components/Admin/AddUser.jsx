@@ -9,6 +9,7 @@ const AddUser = () => {
     const navigate = useNavigate();
   
     const { user } = useSelector((state) => state.auth);
+    const { loading, error } = useSelector((state) => state.admin);
   
     useEffect(() => {
       if (user && user.role !== "admin") {
@@ -34,21 +35,31 @@ const AddUser = () => {
     
         const handleSubmit = (e) => {
             e.preventDefault();
-            dispatch(addUser(formData));
-            setFormData({
+            dispatch(addUser(formData)).unwrap()
+            .then(() => {
+              setFormData({
                 firstName: "",
                 lastName: "",
                 email: "",
                 password: "",
                 role: "client",
+              });
+              navigate("/admin/users");
+            })
+            .catch(() => {
+              // error already handled in Redux
             });
-            navigate("/admin/users");
+          
         };
     
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
         <h2 className="text-3xl font-bold mb-6">Ajouter un utilisateur</h2>
         <form onSubmit={handleSubmit}>
+            {error && (
+                <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm text-center">
+                    {error}
+                </div>)}
                 <div className="mb-4">
                     <label className="block text-gray-700">Prénom</label>
                     <input 

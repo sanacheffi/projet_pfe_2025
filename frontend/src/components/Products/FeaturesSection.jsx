@@ -6,7 +6,7 @@ import { SlEarphonesAlt } from 'react-icons/sl'
 const FeaturesSection = () => {
   return (
     <section className="py-16 px-4 bg-white">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div className="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="flex flex-col items-center">
                 <div className="p-4 rounded-full mb-4">
                     <LiaShippingFastSolid className="text-3xl" />

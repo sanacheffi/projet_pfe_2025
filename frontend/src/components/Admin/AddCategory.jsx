@@ -65,6 +65,10 @@ const AddCategory = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (categoryData.image.length === 0) {
+      alert("Veuillez importer au moins une image.");
+      return;
+    }
     dispatch(createCategory(categoryData));
     setCategoryData({
         name: "",

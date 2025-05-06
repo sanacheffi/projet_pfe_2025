@@ -23,7 +23,7 @@ const CollectionSection = () => {
         </p>
       </div>
 
-      {loading && <Loader color="#cead8e" />}
+      {loading && <Loader color="#cca78a" />}
       {error && <p className="text-center text-red-500">Erreur: {error}</p>}
 
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4 lg:grid-cols-4">

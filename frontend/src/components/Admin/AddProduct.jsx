@@ -85,6 +85,12 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    if (productData.images.length === 0) {
+      alert("Veuillez importer au moins une image.");
+      return;
+    }
+  
     dispatch(createProduct(productData));
     setProductData({
       name: "",
@@ -100,6 +106,7 @@ const AddProduct = () => {
     });
     navigate("/admin/products");
   };
+  
 
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
@@ -166,6 +173,7 @@ const AddProduct = () => {
               value={productData.category}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md p-2"
+              required
             >
               <option value="">-- Sélectionner une catégorie --</option>
               {categories.map((cat) => (
@@ -184,6 +192,7 @@ const AddProduct = () => {
               value={productData.subCategory}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md p-2"
+              required
             >
               <option value="">-- Sélectionner une sous-catégories --</option>
               {subCategories.map((sub) => (
@@ -203,6 +212,7 @@ const AddProduct = () => {
             value={productData.stock_status}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-md p-2"
+            required
           >
             <option value="en_stock">En stock</option>
             <option value="rupture_de_stock">Rupture de stock</option>

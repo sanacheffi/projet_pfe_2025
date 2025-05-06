@@ -14,12 +14,12 @@ const DevisFormPreview = () => {
     }
   };
   return (
-    <div className="bg-white py-24 sm:py-32 lg:py-40">
+    <div className="bg-white py-24 sm:py-32 lg:py-10">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
           {/* Left Text Section */}
           <div className="lg:max-w-xl text-center md:text-left mx-auto lg:mx-0">
-            <h2 className="text-4xl text-gray-900 lg:text-5xl font-medium uppercase">
+            <h2 className="text-4xl lg:text-5xl font-medium uppercase">
               Besoin d’un devis ou d’un produit personnalisé ?
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">

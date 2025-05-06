@@ -1,14 +1,12 @@
-// src/components/Loader.jsx
 import React from "react";
 import { ClipLoader } from "react-spinners";
 
 const override = {
   display: "block",
   margin: "0 auto",
-  borderColor: "gray-800",
 };
 
-const Loader = ({color}) => {
+const Loader = ({ color }) => {
   return (
     <ClipLoader
       color={color}

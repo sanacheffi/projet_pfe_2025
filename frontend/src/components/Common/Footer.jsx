@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FiMail, FiPhoneCall } from 'react-icons/fi'
 import { IoLogoFacebook, IoLogoInstagram } from 'react-icons/io'
 import { Link } from 'react-router-dom'
+import { fetchCategories } from '../../redux/slices/categorySlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Footer = () => {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   return (
     <footer className="border-t py-12">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4 lg:grid-cols-4">
@@ -23,18 +31,12 @@ const Footer = () => {
         <div>
           <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
           <ul className="space-y-2 text-gray-600">
-            <li>
-              <Link to="/collections/all?category=Meubles Rotin" className="hover:text-gray-500 transition-colors">Meubles Rotin</Link>
+          {categories?.map((category) => (
+            <li key={category._id}>
+              <Link to={`/collections/all?category=${encodeURIComponent(category.name)}`} 
+              className="hover:text-gray-500 transition-colors">{category.name}</Link>
             </li>
-            <li>
-              <Link to="/collections/all?category=Luminaires Rotin" className="hover:text-gray-500 transition-colors">Luminaires Rotin</Link>
-            </li>
-            <li>
-              <Link to="/collections/all?category=Objets de Décoration" className="hover:text-gray-500 transition-colors">Objets de Décoration</Link>
-            </li>
-            <li>
-              <Link to="/collections/all?category=Décorations Murales" className="hover:text-gray-500 transition-colors">Décorations Murales</Link>
-            </li>
+            ))}
           </ul>
         </div>
 
@@ -49,9 +51,6 @@ const Footer = () => {
             </li>
             <li>
               <Link to="#" className="hover:text-gray-500 transition-colors">FAQs</Link>
-            </li>
-            <li>
-              <Link to="#" className="hover:text-gray-500 transition-colors">Features</Link>
             </li>
           </ul>
         </div>

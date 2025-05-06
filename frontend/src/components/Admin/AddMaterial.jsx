@@ -63,6 +63,10 @@ const AddMaterial = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (materialData.images.length === 0) {
+      alert("Veuillez importer au moins une image.");
+      return;
+    }
     dispatch(createMaterial(materialData));
     setMaterialData({
     name: '',
@@ -101,6 +105,7 @@ const AddMaterial = () => {
             value={materialData.supplier}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-md p-2"
+            required
           />
         </div>
 
