@@ -9,7 +9,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
   const navigate = useNavigate();
   const { user, guestId } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
-  const userId = user ? user._id : null;
+  const userId = user ? user.id : null;
 
   const handleCheckout = () => {
     toggleCartDrawer();
@@ -61,7 +61,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
         <div className="flex-grow p-4 overflow-y-auto">
           <h2 className="text-xl font-semibold mb-4">Panier</h2>
           {cart && cart?.products.length > 0 ? (
-            <CartContents cart={cart} userId={userId} guestId={guestId} />
+            <CartContents cart={cart} userId={userId} guestId={userId ? undefined : guestId} />
           ) : (
             <p>Votre panier est vide.</p>
           )}

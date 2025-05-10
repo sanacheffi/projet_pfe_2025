@@ -74,7 +74,6 @@ export const fetchOrderDetails = createAsyncThunk(
           },
         }
       );
-      //console.log("Fetched Order Details:", response.data); // Log the response
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message);
@@ -89,7 +88,7 @@ const adminOrderSlice = createSlice({
     orders: [],
     totalOrders: 0,
     totalSales: 0,
-    orderDetails: null, // Add state for order details
+    orderDetails: null, 
     loading: false,
     error: null,
   },

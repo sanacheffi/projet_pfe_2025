@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginUser } from '../redux/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { mergeCart } from '../redux/slices/cartSlice';
+import { fetchCart, mergeCart } from '../redux/slices/cartSlice';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -21,13 +21,16 @@ useEffect(() => {
   if (user) {
     if (cart?.products.length > 0 && guestId) {
       dispatch(mergeCart({ guestId, user })).then(() => {
+        dispatch(fetchCart({ userId: user.id, guestId })); // <--- Add this here
         navigate(redirect);
       });
     } else {
+      dispatch(fetchCart({ userId: user.id, guestId })); // <--- And here as well
       navigate(redirect);
     }
   }
 }, [user, guestId, cart, navigate, redirect, dispatch]);
+
 
 
     const handleSubmit = (e) => {

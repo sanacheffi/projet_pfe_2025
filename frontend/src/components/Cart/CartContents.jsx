@@ -24,15 +24,14 @@ const CartContents = ({ cart, userId, guestId }) => {
             updateCartItemQuantity({
                 productId,
                 quantity: newQuantity,
-                guestId,
-                userId,
+                ...(userId ? { userId } : { guestId })
             })
         );
     };
     
 
     const handleRemoveFromCart = (productId) => {
-        dispatch(removeFromCart({ productId, guestId, userId }));
+        dispatch(removeFromCart({ productId,...(userId ? { userId } : { guestId }) }));
     };
 
     return (

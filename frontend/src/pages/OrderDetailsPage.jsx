@@ -68,7 +68,7 @@ const OrderDetailsPage = () => {
             <div>
               <h4 className="text-lg font-semibold mb-2">Informations de paiement</h4>
               <p>Méthode de paiement : {orderDetails.paymentMethod}</p>
-              <p>Statut : {orderDetails.isPaid ? "Payée" : "Non payée"}</p>
+              {/* <p>Statut : {orderDetails.isPaid ? "Payée" : "Non payée"}</p> */}
             </div>
           </div>
 
