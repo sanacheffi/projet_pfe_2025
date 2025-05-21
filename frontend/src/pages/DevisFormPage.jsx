@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts } from '../redux/slices/productsSlice';
 import Loader from '../components/Common/Loader';
 import { RiDeleteBin3Line } from 'react-icons/ri';
+import { createDevis } from '../redux/slices/devisSlice';
 
 const DevisFormPage = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
-
+  const { user } = useSelector((state) => state.auth);
+  const [errorMessage, setErrorMessage] = useState('');
   const [devisData, setDevisData] = useState({
     firstName: '',
     lastName: '',
@@ -15,19 +17,24 @@ const DevisFormPage = () => {
     phone: '',
     company: '',
     description: '',
-    country: '',
-    city: '',
-    address: '',
-    postalCode: '',
-    date: '',
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
+useEffect(() => {
+  dispatch(fetchAllProducts());
+
+
+  if (user) {
+    setDevisData((prev) => ({
+      ...prev,
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email || '',
+    }));
+  }
+}, [dispatch, user]);
 
   const handleAddProduct = (product) => {
     if (!selectedProducts.find((p) => p._id === product._id)) {
@@ -41,15 +48,27 @@ const DevisFormPage = () => {
     );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const dataToSubmit = {
-      ...devisData,
-      products: selectedProducts,
-    };
-    console.log(dataToSubmit);
-    setSubmitted(true);
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  if (selectedProducts.length === 0) {
+    setErrorMessage('Veuillez sélectionner au moins un produit.');
+    setTimeout(() => setErrorMessage(''), 3000);
+    return;
+  }
+
+  const dataToSubmit = {
+    ...devisData,
+    products: selectedProducts,
+    user: user ? user.id : null,
   };
+
+  dispatch(createDevis(dataToSubmit));
+  setSubmitted(true);
+  setErrorMessage('');
+};
+
+
   if (loading) return <Loader color="#cca78a" />;
   if (error) return <p>Error: {error}</p>;
   return (
@@ -63,13 +82,10 @@ const DevisFormPage = () => {
             <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Prénom</label>
               <input
-                type="text"
-                value={devisData.firstName}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, firstName: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
+              type="text"
+              value={devisData.firstName}
+              disabled
+              className="w-full p-2 border rounded bg-gray-100"
               />
             </div>
 
@@ -77,13 +93,10 @@ const DevisFormPage = () => {
             <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Nom</label>
               <input
-                type="text"
-                value={devisData.lastName}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, lastName: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
+              type="text"
+              value={devisData.lastName}
+              disabled
+              className="w-full p-2 border rounded bg-gray-100"
               />
             </div>
             </div>
@@ -93,13 +106,10 @@ const DevisFormPage = () => {
             <div className="w-full md:w-1/2">
               <label className="block text-gray-700">Email</label>
               <input
-                type="email"
-                value={devisData.email}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, email: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
+              type="email"
+              value={devisData.email}
+              disabled
+              className="w-full p-2 border rounded bg-gray-100"
               />
             </div>
 
@@ -175,6 +185,11 @@ const DevisFormPage = () => {
                 </div>
               ))}
             </div>
+            {errorMessage && (
+                <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-center">
+                    {errorMessage}
+                </div>
+            )}
 
             {/* description */}
             <div className="mb-4">
@@ -185,78 +200,7 @@ const DevisFormPage = () => {
                 className="w-full p-2 border rounded"
                 rows="4"
               />
-            </div>
-            <div className="mb-4 flex flex-col md:flex-row gap-4">
-            
-            {/* Pays */}
-            <div className="w-full md:w-1/2">
-              <label className="block text-gray-700">Pays</label>
-              <input
-                type="text"
-                value={devisData.country}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, country: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            {/* ville */}
-            <div className="w-full md:w-1/2">
-              <label className="block text-gray-700">Ville</label>
-              <input
-                type="text"
-                value={devisData.city}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, city: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            </div>
-            <div className="mb-4 flex flex-col md:flex-row gap-4">
-            
-            {/* Adresse */}
-            <div className="w-full md:w-1/2">
-              <label className="block text-gray-700">Adresse</label>
-              <input
-                type="text"
-                value={devisData.address}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, address: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            {/* Code Postal */}
-            <div className="w-full md:w-1/2">
-              <label className="block text-gray-700">Code Postal</label>
-              <input
-                type="text"
-                value={devisData.postalCode}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, postalCode: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            </div>
-
-            {/* date */}
-            <div className="mb-4">
-              <label className="block text-gray-700">Date</label>
-              <input
-                type="date"
-                value={devisData.date}
-                onChange={(e) =>
-                  setDevisData({ ...devisData, date: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
-            </div>
+            </div>            
 
             <button type="submit" className="w-full bg-black text-white py-3 rounded">
               Envoyer

@@ -64,9 +64,9 @@ const OrderDetailsAdmin = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
           <div>
             <h4 className="text-lg font-semibold mb-2 text-gray-800">Informations de client</h4>
-            <p>{orderDetails.user.firstName} {orderDetails.user.lastName}</p>
-            <p>{orderDetails.user.email}</p>
-            <p>Tel : {orderDetails.shippingAddress.phone}</p>
+            <p><span className="font-semibold text-gray-800">Nom :</span> {orderDetails.user.firstName} {orderDetails.user.lastName}</p>
+            <p><span className="font-semibold text-gray-800">Email :</span> {orderDetails.user.email}</p>
+            <p><span className="font-semibold text-gray-800">Téléphone :</span> {orderDetails.shippingAddress.phone}</p>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-2 text-gray-800">Informations de livraison</h4>
@@ -105,13 +105,13 @@ const OrderDetailsAdmin = () => {
                     </td>
                     <td className="py-2 px-4">{item.price}</td>
                     <td className="py-2 px-4">{item.quantity}</td>
-                    <td className="py-2 px-4">{item.price * item.quantity}</td>
+                    <td className="py-2 px-4">{(item.price * item.quantity).toFixed(3)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <Link to="/admin/orders" className="mt-6 inline-block text-blue-500 hover:underline">Retourner à mes commandes</Link>
+          <Link to="/admin/orders" className="mt-6 inline-block text-blue-500 hover:underline">Retourner à la liste des commandes</Link>
         </div>
       )}
     </div>

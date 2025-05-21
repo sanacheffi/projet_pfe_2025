@@ -8,7 +8,7 @@ const router = express.Router();
 // @access Private/Admin
 router.get("/", protect, admin, async (req, res) => {
   try {
-    const orders = await Order.find({}).populate("user", "firstName lastName");
+    const orders = await Order.find({}).populate("user", "firstName lastName").sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
     console.error(error);

@@ -16,6 +16,8 @@ const CategoryManagement = () => {
          useEffect(() => {
            if (user && user.role === "admin") {
             dispatch(fetchCategories());
+           }else{
+            navigate("/");
            }
          }, [dispatch, user]); 
 

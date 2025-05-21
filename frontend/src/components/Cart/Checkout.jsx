@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createCheckout } from '../../redux/slices/checkoutSlice';
+import Loader from '../Common/Loader';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const Checkout = () => {
     
   };
 
-  if (loading) return <p>Chargement du panier...</p>;
+  if (loading) return <Loader color="#cca78a" />;
   if (error) return <p>Erreur: {error}</p>;
   if (!cart || cart.products.length === 0) return <p>Votre panier est vide</p>;
 
@@ -69,7 +70,7 @@ const Checkout = () => {
             {errorMessage}
           </div>
         )}
-        <h2 className="text-2xl uppercase mb-6">Checkout</h2>
+        <h2 className="text-2xl uppercase mb-6">Finalisation de la commande</h2>
         <form onSubmit={handleCreateCheckout}>
           {/* User Info */}
           <h3 className="text-lg mb-4">Vos Coordonnées</h3>

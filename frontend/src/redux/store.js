@@ -11,6 +11,7 @@ import contactReducer from "./slices/contactSlice";
 import materialReducer from "./slices/materialSlice";
 import categoryReducer from "./slices/categorySlice";
 import subCategoryReducer from "./slices/subCategorySlice";
+import devisReducer from "./slices/devisSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     materials : materialReducer,
     category : categoryReducer,
     subCategory : subCategoryReducer,
+    devis : devisReducer,
   },
 });
 

@@ -39,20 +39,20 @@ const OrderDetailsPage = () => {
                 {orderDetails.isPaid ? "Payée" : "Paiement à la livraison"}
               </span>
               <span
-    className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
-      orderDetails.status === "En cours de traitement"
-        ? "bg-yellow-100 text-yellow-700"
-        : orderDetails.status === "Expédiée"
-        ? "bg-orange-100 text-orange-700"
-        : orderDetails.status === "Livrée"
-        ? "bg-green-100 text-green-700"
-        : orderDetails.status === "Annulée"
-        ? "bg-red-100 text-red-700"
-        : ""
-    }`}
-  >
-    {orderDetails.status}
-  </span>
+              className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                orderDetails.status === "En cours de traitement"
+                ? "bg-yellow-100 text-yellow-700"
+                : orderDetails.status === "Expédiée"
+                ? "bg-orange-100 text-orange-700"
+                : orderDetails.status === "Livrée"
+                ? "bg-green-100 text-green-700"
+                : orderDetails.status === "Annulée"
+                ? "bg-red-100 text-red-700"
+                : ""
+              }`}
+              >
+                {orderDetails.status}
+              </span>
             </div>
           </div>
 
@@ -61,13 +61,13 @@ const OrderDetailsPage = () => {
           <div>
               <h4 className="text-lg font-semibold mb-2">Informations de livraison</h4>
               <p>{`${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.country}`}</p>
-              <p>{`${orderDetails.shippingAddress.address}`}</p>
-              <p>{`${orderDetails.shippingAddress.postalCode}`}</p>
-              <p>Telephone : {`${orderDetails.shippingAddress.phone}`}</p>
+              <p><span className="font-semibold">Adresse :</span> {`${orderDetails.shippingAddress.address}`}</p>
+              <p><span className="font-semibold">Code postal :</span> {`${orderDetails.shippingAddress.postalCode}`}</p>
+              <p><span className="font-semibold">Téléphone :</span> {`${orderDetails.shippingAddress.phone}`}</p>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-2">Informations de paiement</h4>
-              <p>Méthode de paiement : {orderDetails.paymentMethod}</p>
+              <p>{orderDetails.paymentMethod}</p>
               {/* <p>Statut : {orderDetails.isPaid ? "Payée" : "Non payée"}</p> */}
             </div>
           </div>
@@ -97,7 +97,7 @@ const OrderDetailsPage = () => {
                     </td>
                     <td className="py-2 px-4">{item.price} DT</td>
                     <td className="py-2 px-4">{item.quantity}</td>
-                    <td className="py-2 px-4">{item.price * item.quantity} DT</td>
+                    <td className="py-2 px-4">{(item.price * item.quantity).toFixed(3)} DT</td>
                   </tr>
                 ))}
               </tbody>

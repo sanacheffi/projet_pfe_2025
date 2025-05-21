@@ -39,7 +39,7 @@ const CollectionSection = () => {
                 {categorie.name}
               </h2>
               <Link to={`/collections/all?category=${encodeURIComponent(categorie.name)}`} className="text-gray-900 underline">
-                Shop Now
+                Découvrir
               </Link>
             </div>
           </div>

@@ -1,0 +1,94 @@
+const express = require("express");
+const router = express.Router();
+const { protect, admin } = require("../middleware/authMiddleware");
+const Devis = require("../models/Devis");
+const Order = require("../models/Order");
+
+// @route POST /api/devis
+// @desc Submit a new devis
+// @access Public
+router.post("/", async (req, res) => {
+  try {
+    const devis = new Devis(req.body);
+    await devis.save();
+    res.status(201).json({ message: "Devis submitted successfully", devis });
+  } catch (error) {
+    console.error("Error submitting devis:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+// @route GET /api/devis
+// @desc Retrieve all devis (for admin)
+// @access Private/Admin
+router.get("/", protect, admin, async (req, res) => {
+  try {
+    const allDevis = await Devis.find().sort({ createdAt: -1 });
+    res.status(200).json(allDevis);
+  } catch (error) {
+    console.error("Error fetching devis:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+// @route GET /api/devis/:id
+// @desc Get one devis by ID
+// @access Private/Admin
+router.get("/:id", protect, admin, async (req, res) => {
+  try {
+    const devis = await Devis.findById(req.params.id);
+    if (!devis) {
+      return res.status(404).json({ message: "Devis not found" });
+    }
+    res.status(200).json(devis);
+  } catch (error) {
+    console.error("Error fetching devis by ID:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// @route POST /api/devis/:id/convert
+// @desc Convert a devis to an order
+// @access Private
+router.post("/:id/convert", protect, async (req, res) => {
+  try {
+    const devis = await Devis.findById(req.params.id);
+
+    if (!devis) {
+      return res.status(404).json({ message: "Devis not found" });
+    }
+
+    const { shippingAddress, totalPrice, paymentMethod } = req.body;
+
+    if (!shippingAddress || !totalPrice || !paymentMethod) {
+      return res.status(400).json({ message: "Missing required order data" });
+    }
+
+    const orderItems = devis.products.map((product) => ({
+      productId: product._id,
+      name: product.name,
+      image: product.images[0]?.url || "",
+      price: product.price,
+      quantity: product.quantity,
+    }));
+
+    const order = new Order({
+      user: devis.user,
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      totalPrice,
+      isPaid: false,
+    });
+
+    await order.save();
+
+    res.status(201).json({ message: "Order created from devis", order });
+  } catch (error) {
+    console.error("Error converting devis:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+module.exports = router;

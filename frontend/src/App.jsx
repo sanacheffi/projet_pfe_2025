@@ -39,11 +39,16 @@ import EditCategory from './components/Admin/EditCategory'
 import AddCategory from './components/Admin/AddCategory'
 import AddSubCategory from './components/Admin/AddSubCategory'
 import EditSubCategory from './components/Admin/EditSubCategory'
+import DevisManagement from './components/Admin/DevisManagement'
+import DevisDetails from './components/Admin/DevisDetails'
+import ScrollToTop from './ScrollToTop'
+import ConvertDevisForm from './components/Admin/ConvertDevisForm'
 
 const App = () => {
   return (
     <Provider store={store}>
     <BrowserRouter>
+    <ScrollToTop />
     <Toaster position="top-right"/>
     <Routes>
       {/* user layout */}
@@ -83,6 +88,9 @@ const App = () => {
       <Route path="materials" element={<MaterialManagement/>}/>
       <Route path="materials/add" element={<AddMaterial/>}/>
       <Route path="materials/:id/edit" element={<EditMaterial/>}/>
+      <Route path="devis" element={<DevisManagement/>}/>
+      <Route path="devis/:devisId" element={<DevisDetails/>}/>
+      <Route path="/admin/devis/:devisId/convert" element={<ConvertDevisForm />} />
       </Route>
     </Routes>
     </BrowserRouter>

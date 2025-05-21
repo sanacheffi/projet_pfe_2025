@@ -9,7 +9,7 @@ const router = express.Router();
 // @access Private/Admin
 router.get("/", protect, admin, async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).sort({ createdAt: -1 });
     res.json(users);
   } catch (error) {
     console.error(error);

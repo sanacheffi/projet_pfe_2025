@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/slices/authSlice';
 import { clearCart } from '../../redux/slices/cartSlice';
+import { FaFileInvoiceDollar } from 'react-icons/fa6';
 
 const AdminSidebar = () => {
   const dispatch = useDispatch();
@@ -64,16 +65,6 @@ const AdminSidebar = () => {
               <FaSitemap />
               <span>Sous-catégories</span>
             </NavLink>
-
-            <NavLink 
-              to="/admin/reclamation"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
-              <BsChatSquareTextFill />
-              <span>Réclamation</span>
-            </NavLink>
           </>
         )}
         {/* Accessible to admin and artisan */}
@@ -99,6 +90,30 @@ const AdminSidebar = () => {
               <span>Matières premières</span>
             </NavLink>
 
+          </>
+        )}
+
+        {/* Only admin */}
+        {user?.role === 'admin' && (
+          <>
+          <NavLink 
+              to="/admin/devis"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+              <FaFileInvoiceDollar />
+              <span>Demande de devis</span>
+          </NavLink>
+          <NavLink 
+              to="/admin/reclamation"
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+              <BsChatSquareTextFill />
+              <span>Réclamation</span>
+            </NavLink>
           </>
         )}
 

@@ -121,42 +121,43 @@ router.get("/", async (req, res) => {
     const { category, subCategory, sortBy, search } = req.query;
 
     const query = {};
-    let sort = {}; 
-    
-    // Filter logic
-if (category && category.toLocaleLowerCase() != "all") {
-  query.category = category;
-}
+    let sort = {};
 
-if (subCategory && subCategory.toLocaleLowerCase() != "all") {
-  query.subCategory = subCategory;
-}
+    // Filter logic
+    if (category && category.toLowerCase() !== "all") {
+      query.category = category;
+    }
+
+    if (subCategory && subCategory.toLowerCase() !== "all") {
+      query.subCategory = subCategory;
+    }
+
+    // Search logic
+    if (search) {
+      query.$or = [
+        { name: { $regex: `\\b${search}\\b`, $options: "i" } },
+        { description: { $regex: `\\b${search}\\b`, $options: "i" } }
+      ];
+    }
 
     // Sort Logic
     if (sortBy) {
       switch (sortBy) {
         case "priceAsc":
-          sort = { price: 1 };  
+          sort = { price: 1 };
           break;
         case "priceDesc":
-          sort = { price: -1 }; 
+          sort = { price: -1 };
           break;
         default:
-          sort = {}; 
+          sort = { createdAt: -1 };
           break;
       }
+    } else {
+      sort = { createdAt: -1 };
     }
 
-    // Inside your search logic
-    if (search) {
-      query.$or = [
-        { name: { $regex: `\\b${search}\\b`, $options: "i" } }, 
-        { description: { $regex: `\\b${search}\\b`, $options: "i" } }  
-      ];
-    }
-
-    // Fetch products with optional sorting and filters
-    const products = await Product.find(query).sort(sort); 
+    const products = await Product.find(query).sort(sort);
 
     res.json(products);
   } catch (error) {

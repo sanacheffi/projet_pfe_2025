@@ -16,7 +16,8 @@ const contactRoutes = require("./routes/contactRoutes");
 const materialRoutes = require("./routes/materialRoutes");
 const categoryRoutes = require('./routes/categoryRoutes');
 const subCategoryRoutes = require('./routes/subCategoryRoutes');
-
+const devisRoutes = require("./routes/devisRoutes");
+const chatbotRoute = require("./routes/chatbotRoute");
 
 const app = express();
 app.use(express.json());
@@ -44,6 +45,8 @@ app.use("/api", subscriberRoute);
 app.use("/api/contacts", contactRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/subcategories', subCategoryRoutes);
+app.use("/api/devis", devisRoutes);
+app.use('/api/chat', chatbotRoute);
 
 //Admin Routes
 app.use("/api/admin/users", adminRoutes);
