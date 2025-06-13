@@ -39,13 +39,13 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
 
   return (
     <>
-      {/* Optional overlay
+      {/* Optional overlay */}
       {drawerOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-30 z-40"
           onClick={toggleCartDrawer}
         ></div>
-      )} */}
+      )}
 
       <div
         ref={drawerRef}

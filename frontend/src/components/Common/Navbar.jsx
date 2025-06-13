@@ -54,6 +54,13 @@ const Navbar = () => {
 
   return (
     <>
+    {navDrawerOpen && (
+      <div
+        className="fixed inset-0 bg-black bg-opacity-30 z-40"
+        onClick={toggleNavDrawer}
+        ></div>
+    )}
+
       <nav className="container mx-auto flex items-center justify-between py-4 px-2">
         <button onClick={toggleNavDrawer} className="lg:hidden hover:text-black">
           <HiBars3BottomLeft className="h-6 w-6 text-gray-700" />
@@ -76,17 +83,22 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          {user && (user.role === "admin" || user.role === "artisan") && (
+          {/* {user && (user.role === "admin" || user.role === "artisan") && (
             <Link to="/admin" className="block bg-black px-2 rounded text-sm text-white">
               Admin
             </Link>
-          )}
+          )} */}
           <div className="overflow-hidden">
             <SearchBar />
           </div>
-          <Link to="/profile" className="hover:text-black">
+          {user ? (
+            <Link to={user.role === "admin" || user.role === "artisan" ? "/admin" : "/profile"} className="hover:text-black">
+              <HiOutlineUser className="h-6 w-6 text-gray-700" />
+            </Link>
+          ) : ( <Link to="/login" className="hover:text-black">
             <HiOutlineUser className="h-6 w-6 text-gray-700" />
-          </Link>
+            </Link>
+          )}
           <button onClick={toggleCartDrawer} className="relative hover:text-black">
             <HiOutlineShoppingBag className="h-6 w-6 text-gray-700" />
             {cartItemCount > 0 && (

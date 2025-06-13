@@ -46,66 +46,68 @@ const ConvertDevisForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto p-6 shadow-md rounded-md">
       {error && (
         <div className="bg-red-100 text-red-700 p-4 rounded mb-6">
           {error}
         </div>
       )}
-      <h2 className="text-2xl uppercase mb-6">Convertir le devis en commande</h2>
+      <h2 className="text-3xl font-bold mb-6">Convertir le devis en commande</h2>
 
       <form onSubmit={handleSubmit}>
         {/* Adresse de livraison */}
         <h3 className="text-lg mb-4">Adresse de livraison</h3>
 
-        <div className="mb-4">
-          <label>Pays</label>
-          <input
-            type="text"
-            name="country"
-            value={formData.shippingAddress.country}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-
         <div className="mb-4 grid grid-cols-2 gap-4">
-          <div>
-            <label>Gouvernorat</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.shippingAddress.city}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label>Code Postal</label>
-            <input
-              type="text"
-              name="postalCode"
-              value={formData.shippingAddress.postalCode}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-        </div>
+  <div>
+    <label>Pays</label>
+    <input
+      type="text"
+      name="country"
+      value={formData.shippingAddress.country}
+      onChange={handleChange}
+      className="w-full p-2 border rounded"
+      required
+    />
+  </div>
+  <div>
+    <label>Gouvernorat</label>
+    <input
+      type="text"
+      name="city"
+      value={formData.shippingAddress.city}
+      onChange={handleChange}
+      className="w-full p-2 border rounded"
+      required
+    />
+  </div>
+</div>
 
-        <div className="mb-4">
-          <label>Adresse</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.shippingAddress.address}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
+<div className="mb-4 grid grid-cols-2 gap-4">
+  <div>
+    <label>Adresse</label>
+    <input
+      type="text"
+      name="address"
+      value={formData.shippingAddress.address}
+      onChange={handleChange}
+      className="w-full p-2 border rounded"
+      required
+    />
+  </div>
+  <div>
+    <label>Code Postal</label>
+    <input
+      type="text"
+      name="postalCode"
+      value={formData.shippingAddress.postalCode}
+      onChange={handleChange}
+      className="w-full p-2 border rounded"
+      required
+    />
+  </div>
+</div>
+
 
         <div className="mb-4">
           <label>Téléphone</label>

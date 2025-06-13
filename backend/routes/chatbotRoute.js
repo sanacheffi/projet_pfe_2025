@@ -10,14 +10,16 @@ const llama = new Ollama({
 
 // ✅ Get list of collections from DB
 async function getCollections() {
+  const allowed = ['products', 'categories', 'subcategories'];
   try {
     const collections = await mongoose.connection.db.listCollections().toArray();
-    return collections.map(col => col.name);
+    return collections.map(col => col.name).filter(name => allowed.includes(name));
   } catch (error) {
     console.error("Erreur lors de la récupération des collections:", error);
     return [];
   }
 }
+
 
 // ✅ Try to extract valid JSON from possibly malformed LLaMA output
 function extractJSON(text) {
@@ -38,58 +40,12 @@ function extractJSON(text) {
   }
 }
 
-// ✅ Sanitize AI-generated queries to remove unsupported $elemMatch for string fields
-function sanitizeQuery(query) {
-  if (Array.isArray(query)) {
-    // Aggregation pipeline
-    return query.map(stage => {
-      if (stage.$match) {
-        const newMatch = {};
-        for (const [key, value] of Object.entries(stage.$match)) {
-          if (value && typeof value === 'object' && '$elemMatch' in value) {
-            const elemMatchValue = value.$elemMatch;
-            if (elemMatchValue && typeof elemMatchValue === 'object' && ('$regex' in elemMatchValue)) {
-              newMatch[key] = new RegExp(elemMatchValue.$regex, elemMatchValue.$options || '');
-            } else {
-              newMatch[key] = elemMatchValue;
-            }
-          } else {
-            newMatch[key] = value;
-          }
-        }
-        return {
-          ...stage,
-          $match: newMatch
-        };
-      }
-      return stage;
-    });
-  } else if (query && typeof query === 'object') {
-    // Simple find query
-    const newQuery = {};
-    for (const [key, value] of Object.entries(query)) {
-      if (value && typeof value === 'object' && '$elemMatch' in value) {
-        const elemMatchValue = value.$elemMatch;
-        if (elemMatchValue && typeof elemMatchValue === 'object' && ('$regex' in elemMatchValue)) {
-          newQuery[key] = new RegExp(elemMatchValue.$regex, elemMatchValue.$options || '');
-        } else {
-          newQuery[key] = elemMatchValue;
-        }
-      } else {
-        newQuery[key] = value;
-      }
-    }
-    return newQuery;
-  }
-  return query;
-}
-
 // ✅ Analyze user's question and get intent + MongoDB query
 async function analyzeIntent(userQuestion) {
   const availableCollections = await getCollections();
   console.log("Collections disponibles:", availableCollections);
 
-  const prompt = `
+const prompt = `
 Tu es un assistant qui analyse des questions en français et génère des requêtes MongoDB appropriées.
 
 Les collections disponibles dans la base de données sont : ${availableCollections.join(', ')}.
@@ -98,17 +54,17 @@ Correspondances des champs :
 - nom = name
 - prix = price
 - catégorie = category
+- sous-catégorie = subCategory
 - produit = product
 - description = description
+- date = createdAt ou date (si existant)
 
-Réponds UNIQUEMENT avec un objet JSON valide :
-{
-  "intent": "list|search|aggregate",
-  "collection": "nom_de_la_collection",
-  "query": {}
-}
+Réponds UNIQUEMENT avec un objet JSON valide, sans explication, sans introduction.
 
-Exemple pour le produit le plus cher :
+Voici des exemples de questions et les réponses attendues :
+
+1. Question : Quel est le produit le plus cher ?
+Réponse :
 {
   "intent": "aggregate",
   "collection": "products",
@@ -118,8 +74,102 @@ Exemple pour le produit le plus cher :
   ]
 }
 
+2. Question : Quel est le produit le moins cher ?
+Réponse :
+{
+  "intent": "aggregate",
+  "collection": "products",
+  "query": [
+    { "$sort": { "price": 1 } },
+    { "$limit": 1 }
+  ]
+}
+
+3. Question : Montre-moi les produits à moins de 20 dinars
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "price": { "$lt": 20 }
+  }
+}
+
+4. Question : Quels sont les produits à plus de 50 dinars?
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "price": { "$gt": 50 }
+  }
+}
+
+5. Question : Donne-moi les produits entre 30 et 60 dinars
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "price": { "$gte": 30, "$lte": 60 }
+  }
+}
+
+6. Question : Donne-moi les produits de la catégorie meubles
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "category": "Meubles Rotin"
+  }
+}
+
+7. Question : Produits de la sous-catégorie chaises
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "subCategory": "chaises"
+  }
+}
+
+8. Question : Montre-moi les chaises disponible
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "name": { "$regex": "Chaise", "$options": "i" }
+  }
+}
+
+
+9. Question : Donne-moi les produits de la catégorie luminaires à moins de 100 dinars
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "category": "luminaires",
+    "price": { "$lt": 100 }
+  }
+}
+
+10. Question : Liste tous les produits
+Réponse :
+{
+  "intent": "list",
+  "collection": "products",
+  "query": {}
+}
+
+Maintenant, traite la question suivante :
+
 Question : ${userQuestion}
-  `;
+`;
+
 
   try {
     const response = await llama.call(prompt);
@@ -158,6 +208,7 @@ Génère une réponse naturelle en français basée sur ces données.
 - Si aucune donnée n'est trouvée, indique-le poliment.
 - Si plusieurs éléments sont trouvés, fais-en un résumé clair.
 - Réponds en français.
+- Affiche les prix en dinars tunisiens (TND).
 - Sois concis mais informatif.
 `;
 
@@ -170,7 +221,7 @@ Génère une réponse naturelle en français basée sur ces données.
   }
 }
 
-//  chatbot route
+// ✅ Main chatbot route
 router.post('/', async (req, res) => {
   try {
     const userQuestion = req.body.question;
@@ -182,33 +233,23 @@ router.post('/', async (req, res) => {
     const analysis = await analyzeIntent(userQuestion);
     console.log("Analyse finale:", analysis);
 
-    // Make category query case-insensitive for aggregate and find
-    if (Array.isArray(analysis.query)) {
-      analysis.query = analysis.query.map(stage => {
-        if (stage.$match && typeof stage.$match.category === 'string') {
-          return {
-            ...stage,
-            $match: {
-              ...stage.$match,
-              category: new RegExp(`^${stage.$match.category}$`, 'i')
-            }
-          };
-        }
-        return stage;
-      });
-    } else if (analysis.query && typeof analysis.query.category === 'string') {
-      analysis.query.category = new RegExp(`^${analysis.query.category}$`, 'i');
-    }
-
-    // Sanitize query to remove unsupported $elemMatch operators before MongoDB call
-    const sanitizedQuery = sanitizeQuery(analysis.query);
-
     let data;
-    if (analysis.intent === 'aggregate') {
-      data = await mongoose.connection.db.collection(analysis.collection).aggregate(sanitizedQuery).toArray();
-    } else {
-      data = await mongoose.connection.db.collection(analysis.collection).find(sanitizedQuery).toArray();
-    }
+    // ✅ Convert category/subCategory to case-insensitive regex
+if (analysis.intent === 'search' && analysis.query) {
+  if (analysis.query.category && typeof analysis.query.category === 'string') {
+    analysis.query.category = new RegExp(`^${analysis.query.category}$`, 'i');
+  }
+  if (analysis.query.subCategory && typeof analysis.query.subCategory === 'string') {
+    analysis.query.subCategory = new RegExp(`^${analysis.query.subCategory}$`, 'i');
+  }
+}
+
+if (analysis.intent === 'aggregate') {
+  data = await mongoose.connection.db.collection(analysis.collection).aggregate(analysis.query).toArray();
+} else {
+  data = await mongoose.connection.db.collection(analysis.collection).find(analysis.query).toArray();
+}
+
 
     console.log(`${data.length} résultats trouvés dans ${analysis.collection}`);
     const response = await generateResponse(data, userQuestion);
@@ -219,7 +260,7 @@ router.post('/', async (req, res) => {
       debug: {
         intent: analysis.intent,
         collection: analysis.collection,
-        query: sanitizedQuery,
+        query: analysis.query,
         resultCount: data.length
       }
     });

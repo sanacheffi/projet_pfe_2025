@@ -12,6 +12,7 @@ import materialReducer from "./slices/materialSlice";
 import categoryReducer from "./slices/categorySlice";
 import subCategoryReducer from "./slices/subCategorySlice";
 import devisReducer from "./slices/devisSlice";
+import chatbotReducer from "./slices/chatbotSlice";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     category : categoryReducer,
     subCategory : subCategoryReducer,
     devis : devisReducer,
+    chatbot : chatbotReducer,
   },
 });
 

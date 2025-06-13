@@ -80,7 +80,7 @@ const AddMaterial = () => {
 
 
   return (
-    <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
+    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Ajouter une matière</h2>
       <form onSubmit={handleSubmit}>
         {/* Name */}

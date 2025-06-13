@@ -27,11 +27,21 @@ const DevisFormPreview = () => {
               Nous sommes à votre écoute pour répondre à vos besoins spécifiques et vous proposer un devis adapté.
             </p>
             <div className="flex gap-4 mt-6 md:mt-8 justify-center md:justify-start">
-            <button 
-        onClick={handleClick}
-        className="border border-black text-black px-6 py-3 rounded hover:bg-gray-100 transition">
-          Demander un devis
-        </button>
+              <button onClick={handleClick}
+              className="border border-black text-black md:px-6 px-4 py-3 rounded hover:bg-gray-100 transition">
+                Demander un devis
+              </button>
+              <button 
+              onClick={() => {
+                if (!user) {
+                  navigate("/login?redirect=personnalisation");
+                } else {
+                  navigate("/personnalisation");
+                }
+              }}
+              className="border border-black text-black md:px-6 px-4 py-3 rounded hover:bg-gray-100 transition">
+                Personnaliser un produit
+              </button>
             </div>
           </div>
 

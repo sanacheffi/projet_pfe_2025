@@ -5,6 +5,7 @@ import NewArrivals from '../components/Products/NewArrivals'
 import FeaturesSection from '../components/Products/FeaturesSection'
 import BrandHistoryPreview from '../components/Layout/BrandHistoryPreview'
 import DevisFormPreview from '../components/Layout/DevisFormPreview'
+import Chaticon from '../chatbot/Chaticon'
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
       <DevisFormPreview/>
       <BrandHistoryPreview/>
       <FeaturesSection/>
+      <Chaticon/>
     </div>
   )
 }

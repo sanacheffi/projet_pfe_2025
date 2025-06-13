@@ -19,17 +19,22 @@ const isCheckoutRedirect = redirect.includes("checkout");
 
 useEffect(() => {
   if (user) {
+    const baseRedirect = user?.role === 'admin' || user?.role === 'artisan'
+      ? '/admin'
+      : redirect !== '/' ? redirect : '/';
+
     if (cart?.products.length > 0 && guestId) {
       dispatch(mergeCart({ guestId, user })).then(() => {
-        dispatch(fetchCart({ userId: user.id, guestId })); // <--- Add this here
-        navigate(redirect);
+        dispatch(fetchCart({ userId: user.id, guestId }));
+        navigate(baseRedirect);
       });
     } else {
-      dispatch(fetchCart({ userId: user.id, guestId })); // <--- And here as well
-      navigate(redirect);
+      dispatch(fetchCart({ userId: user.id, guestId }));
+      navigate(baseRedirect);
     }
   }
 }, [user, guestId, cart, navigate, redirect, dispatch]);
+
 
 
 

@@ -43,6 +43,8 @@ import DevisManagement from './components/Admin/DevisManagement'
 import DevisDetails from './components/Admin/DevisDetails'
 import ScrollToTop from './ScrollToTop'
 import ConvertDevisForm from './components/Admin/ConvertDevisForm'
+import Chatbot from './chatbot/Chatbot'
+import ProductCustomization from './pages/ProductCustomization'
 
 const App = () => {
   return (
@@ -67,6 +69,8 @@ const App = () => {
       <Route path="order/:id" element={<OrderDetailsPage/>}/>
       <Route path="my-orders" element={<MyOrdersPage/>}/>
       <Route path="profile-management" element={<ProfileManagement/>}/>
+      <Route path="chatbot" element={<Chatbot/>}/>
+      <Route path="personnalisation" element={<ProductCustomization/>}/>
       </Route>
       {/* admin layout */}
       <Route path="/admin" element={<ProtectedRoute roles={["admin", "artisan"]}> <AdminLayout/> </ProtectedRoute>}>
