@@ -40,6 +40,7 @@ const DevisManagement = () => {
               <th className="py-3 px-4">Prénom</th>
               <th className="py-3 px-4">Email</th>
               <th className="py-3 px-4">Date</th>
+              <th className="py-3 px-4">État</th>
             </tr>
           </thead>
           <tbody>
@@ -47,13 +48,29 @@ const DevisManagement = () => {
               devisList.map((devis) =>
                   <tr key={devis._id} 
                   onClick={() => handleRowClick(devis._id)}
-                  className="border-b hover:bg-gray-50 cursor-pointer">
+                  className="bdevis-b hover:bg-gray-50 cursor-pointer">
                     <td className="p-4 px-4 font-medium text-gray-900 whitespace-nowrap">{devis.firstName}</td>
                     <td className="p-4 px-4 font-medium text-gray-900 whitespace-nowrap">{devis.lastName}</td>
                     <td className="p-4">
                        {devis.email}
                     </td>
-                    <td className="p-4">{new Date(devis.createdAt).toLocaleDateString()}</td>
+                    <td className="p-4">{new Date(devis.createdAt).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                    <td className="p-4">
+                                <span
+                                className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                                    devis.status === "Non traitée"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : devis.status === "En cours de négociation"
+                                    ? "bg-orange-100 text-orange-700"
+                                    : devis.status === "Traitée"
+                                    ? "bg-green-100 text-green-700"
+                                    : devis.status === "Annulée"
+                                    ? "bg-red-100 text-red-700"
+                                    : ""
+                                    }`}>
+                                        {devis.status}
+                                </span>
+                            </td>
 
                   </tr>
               )

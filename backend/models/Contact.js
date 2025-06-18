@@ -29,10 +29,14 @@ const contactSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
+    treated: {
+      type: Boolean,
+      default: false, // false = non traitée, true = traitée
+    },
   },
   {
     timestamps: true, 
   }
 );
 
-module.exports = mongoose.model('Contact', contactSchema);;
+module.exports = mongoose.model('Contact', contactSchema);

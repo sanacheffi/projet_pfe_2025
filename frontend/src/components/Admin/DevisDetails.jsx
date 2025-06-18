@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import { fetchDevisById } from "../../redux/slices/devisSlice";
+import { fetchDevisById, updateDevisStatus } from "../../redux/slices/devisSlice";
 import Loader from "../Common/Loader";
 
 const DevisDetails = () => {
@@ -14,6 +14,10 @@ const DevisDetails = () => {
       dispatch(fetchDevisById(devisId));
     }
   }, [dispatch, devisId]);
+
+  const handleStatusChange = (newStatus) => {
+  dispatch(updateDevisStatus({ devisId, status: newStatus }));
+};
 
   if (loading) return <Loader />;
   if (error) return <p className="text-red-500">Erreur : {error}</p>;
@@ -35,6 +39,18 @@ const DevisDetails = () => {
                 {new Date(selectedDevis.createdAt).toLocaleDateString()}
               </p>
             </div>
+            <div className="flex flex-col items-start sm:items-end mt-4 sm:mt-0">
+            <select
+              value={selectedDevis.status}
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="Non traitée">Non traitée</option>
+              <option value="En cours de négociation">En cours de négociation</option>
+              <option value="Traitée">Traitée</option>
+              <option value="Annulée">Annulée</option>
+            </select>
+          </div>
           </div>
 
           {/* Infos client & entreprise */}
@@ -49,7 +65,7 @@ const DevisDetails = () => {
 
             <div>
               <h4 className="text-lg font-semibold mb-2 text-gray-800">Description</h4>
-              <p className="text-gray-700 whitespace-pre-line">{selectedDevis.description}</p>
+              <p className="text-gray-700 whitespace-pre-line">{selectedDevis.description || "Description non fournie"}</p>
             </div>
           </div>
 

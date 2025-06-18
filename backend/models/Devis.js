@@ -40,6 +40,11 @@ const devisSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
+  status: {
+    type: String,
+    enum: ["Non traitée", "En cours de négociation", "Traitée", "Annulée"],
+    default: "Non traitée"
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Devis", devisSchema);

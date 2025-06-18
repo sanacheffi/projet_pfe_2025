@@ -39,4 +39,23 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
+// @route PATCH /api/contacts/:id/treated
+// @desc Toggle treated flag (admin only)
+// @access Private/Admin
+router.patch("/:id/treated", protect, admin, async (req, res) => {
+    try {
+      const contact = await Contact.findById(req.params.id);
+      if (!contact) {
+        return res.status(404).json({ message: "Réclamation introuvable" });
+      }
+      contact.treated = !contact.treated;
+      const updated = await contact.save();
+      res.json(updated);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur du serveur" });
+    }
+  }
+);
+
 module.exports = router;

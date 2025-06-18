@@ -49,6 +49,42 @@ router.get("/:id", protect, admin, async (req, res) => {
   }
 });
 
+// @route PUT /api/devis/:id/status
+// @desc Update devis status
+// @access Private/Admin
+router.put("/:id/status", protect, admin, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const validStatuses = [
+      "Non traitée",
+      "En cours de négociation",
+      "Traitée",
+      "Annulée",
+    ];
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Statut invalide" });
+    }
+
+    const devis = await Devis.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!devis) {
+      return res.status(404).json({ message: "Devis introuvable" });
+    }
+
+    res.status(200).json({ message: "Statut mis à jour", devis });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut :", error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+});
+
+
 // @route POST /api/devis/:id/convert
 // @desc Convert a devis to an order
 // @access Private
@@ -85,10 +121,15 @@ router.post("/:id/convert", protect, async (req, res) => {
 
     await order.save();
 
+    // Automatically update the status of the devis to 'traitée'
+    devis.status = "Traitée";
+    await devis.save();
+
     res.status(201).json({ message: "Order created from devis", order });
   } catch (error) {
     console.error("Error converting devis:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 module.exports = router;

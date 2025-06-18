@@ -54,6 +54,24 @@ export const fetchDevisById = createAsyncThunk(
 }
 );
 
+// Mise à jour du statut d’un devis (admin)
+export const updateDevisStatus = createAsyncThunk(
+  "devis/updateStatus",
+  async ({ devisId, status }, { getState, rejectWithValue }) => {
+    const { token } = getState().auth;
+    try {
+      const { data } = await axios.put(
+        `${API_URL}/api/devis/${devisId}/status`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return data.devis;                 
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 // Convert devis to order
 export const convertDevisToOrder = createAsyncThunk(
   "devis/convertToOrder",
@@ -123,6 +141,27 @@ const devisSlice = createSlice({
       .addCase(fetchDevisById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(updateDevisStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateDevisStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const updated = action.payload;                     // devis complet
+
+        // Met à jour selectedDevis
+        if (state.selectedDevis && state.selectedDevis._id === updated._id) {
+          state.selectedDevis = updated;
+        }
+
+        // Met à jour la liste
+        const idx = state.devisList.findIndex((d) => d._id === updated._id);
+        if (idx !== -1) state.devisList[idx] = updated;
+      })
+      .addCase(updateDevisStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
       .addCase(convertDevisToOrder.pending, (state) => {
   state.loading = true;

@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const { Ollama } = require("@langchain/community/llms/ollama");
+const JSON5 = require('json5');
 
 const llama = new Ollama({
   model: "llama3",
   baseUrl: "http://localhost:11434"
 });
 
-// ✅ Get list of collections from DB
+// Get list of collections from DB
 async function getCollections() {
   const allowed = ['products', 'categories', 'subcategories'];
   try {
@@ -20,32 +21,37 @@ async function getCollections() {
   }
 }
 
-
-// ✅ Try to extract valid JSON from possibly malformed LLaMA output
+// Try to extract valid JSON from possibly malformed LLaMA output
 function extractJSON(text) {
-  try {
-    const start = text.indexOf('{');
-    const end = text.lastIndexOf('}');
-    if (start === -1 || end === -1) throw new Error("Aucun JSON trouvé");
+  const start = text.indexOf('{');
+  const end   = text.lastIndexOf('}');
+  if (start !== -1 && end !== -1 && end > start) {
+    let jsonString = text.slice(start, end + 1);
 
-    let jsonStr = text.substring(start, end + 1);
+    // (Optional) Auto‑balance braces if still unbalanced:
+    const opens  = (jsonString.match(/\{/g) || []).length;
+    const closes = (jsonString.match(/\}/g) || []).length;
+    if (opens > closes) {
+      jsonString += '}'.repeat(opens - closes);
+    }
 
-    // ✅ Fix common issues like trailing commas
-    jsonStr = jsonStr.replace(/,\s*([}\]])/g, '$1');
-
-    return JSON.parse(jsonStr);
-  } catch (error) {
-    console.error("Erreur lors de l'extraction du JSON:", error);
-    return null;
+    try {
+      return JSON5.parse(jsonString);
+    } catch (err) {
+      console.error("Erreur JSON5.parse :", err.message);
+      return null;
+    }
   }
+  return null;
 }
 
-// ✅ Analyze user's question and get intent + MongoDB query
+
+// Analyze user's question and get intent + MongoDB query
 async function analyzeIntent(userQuestion) {
   const availableCollections = await getCollections();
   console.log("Collections disponibles:", availableCollections);
 
-const prompt = `
+  const prompt = `
 Tu es un assistant qui analyse des questions en français et génère des requêtes MongoDB appropriées.
 
 Les collections disponibles dans la base de données sont : ${availableCollections.join(', ')}.
@@ -59,7 +65,9 @@ Correspondances des champs :
 - description = description
 - date = createdAt ou date (si existant)
 
-Réponds UNIQUEMENT avec un objet JSON valide, sans explication, sans introduction.
+Réponds UNIQUEMENT avec un objet JSON valide, sur UNE SEULE LIGNE, sans retour à la ligne ni espaces inutiles, sans explication.
+Aucune virgule finale autorisée.
+N’oublie pas de fermer toutes les accolades. Ton JSON doit commencer par { et se terminer par }.
 
 Voici des exemples de questions et les réponses attendues :
 
@@ -95,7 +103,7 @@ Réponse :
   }
 }
 
-4. Question : Quels sont les produits à plus de 50 dinars?
+4. Question : Quels sont les produits à plus de 50 dinars ?
 Réponse :
 {
   "intent": "search",
@@ -115,7 +123,7 @@ Réponse :
   }
 }
 
-6. Question : Donne-moi les produits de la catégorie meubles
+6. Question : Donne-moi les produits de la catégorie Meubles Rotin
 Réponse :
 {
   "intent": "search",
@@ -135,7 +143,7 @@ Réponse :
   }
 }
 
-8. Question : Montre-moi les chaises disponible
+8. Question : Montre-moi les chaises disponibles
 Réponse :
 {
   "intent": "search",
@@ -144,7 +152,6 @@ Réponse :
     "name": { "$regex": "Chaise", "$options": "i" }
   }
 }
-
 
 9. Question : Donne-moi les produits de la catégorie luminaires à moins de 100 dinars
 Réponse :
@@ -165,39 +172,124 @@ Réponse :
   "query": {}
 }
 
+11. Question : Montre-moi les produits en stock
+Réponse :
+{
+  "intent": "search",
+  "collection": "products",
+  "query": {
+    "countInStock": { "$gt": 0 }
+  }
+}
+
+12. Question : Donne-moi les catégories disponibles
+Réponse :
+{
+  "intent": "distinct",
+  "collection": "products",
+  "field": "category"
+}
+
+13. Question : Quelle est l’histoire de l’entreprise ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Artisanat Cheffi est une entreprise familiale fondée dans les années 70, dédiée à la vannerie. Elle se spécialise dans le tressage de fibres naturelles pour fabriquer aussi bien des objets du quotidien que des pièces artistiques."
+  }
+}
+
+14. Question : Comment puis‑je vous contacter ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Vous pouvez nous joindre par email à artisanatcheffi@gmail.com ou par téléphone au +216 97 202 577."
+  }
+}
+
+15. Question : Quels sont vos horaires de disponibilité ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Nous n’avons pas de boutique physique, mais vous pouvez passer commande à tout moment sur notre site en ligne. Nous répondons à vos messages du lundi au samedi, de 8h00 à 17h00."
+  }
+}
+
+
+16. Question : Où est située votre boutique ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Actuellement, Artisanat Cheffi ne possède pas de point de vente physique. Les produits sont uniquement commercialisés en ligne sur ce site."
+  }
+}
+
+17. Question : Quelle est votre politique de livraison ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Nous livrons dans toute la Tunisie en 3 à 5 jours ouvrables. La livraison est gratuite."
+  }
+}
+
+18. Question : Quelle est votre politique de retour ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Vous pouvez retourner tout article dans un délai de 14 jours après réception, à condition qu’il soit en parfait état et dans son emballage d’origine."
+  }
+}
+
+19. Question : Quels moyens de paiement acceptez‑vous ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Nous acceptons les paiements par carte de crédit (Visa, MasterCard) et paiement à la livraison."
+  }
+}
+
+20. Question : Avez‑vous une garantie sur vos produits ?
+Réponse :
+{
+  "intent": "static",
+  "response": {
+    "text": "Tous nos produits bénéficient d’une garantie de 2 ans contre tout vice de fabrication."
+  }
+}
+
+21. Question : Bonjour
+Réponse :
+{ "intent": "static", "response": { "text": "Bonjour ! Comment puis‑je vous aider ?" } }
+
 Maintenant, traite la question suivante :
 
 Question : ${userQuestion}
 `;
 
+  const response = await llama.call(prompt);
+  console.log("Réponse brute du modèle:", response);
 
-  try {
-    const response = await llama.call(prompt);
-    console.log("Réponse brute du modèle:", response);
-
-    const analysis = extractJSON(response);
-
-    if (!analysis || !analysis.collection || !availableCollections.includes(analysis.collection)) {
-      console.warn(`❌ Collection invalide ou manquante : ${analysis?.collection}`);
-      return {
-        intent: "list",
-        collection: "products", // ✅ Default to products if available
-        query: {}
-      };
+  const analysis = extractJSON(response);
+  // fallback
+  if (!analysis) {
+  return {
+    intent: "static",
+    response: {
+      text: "Désolé, je n’ai pas compris votre question. Pouvez‑vous la reformuler ?"
     }
-
-    return analysis;
-  } catch (error) {
-    console.error("Erreur lors de l'analyse:", error);
-    return {
-      intent: "list",
-      collection: "products",
-      query: {}
-    };
-  }
+  };
 }
 
-// ✅ Generate user-facing response in French
+  return analysis;
+}
+
+// Generate user-facing response in French
 async function generateResponse(data, userQuestion) {
   const prompt = `
 Question de l'utilisateur : ${userQuestion}
@@ -207,18 +299,11 @@ Génère une réponse naturelle en français basée sur ces données.
 
 - Si aucune donnée n'est trouvée, indique-le poliment.
 - Si plusieurs éléments sont trouvés, fais-en un résumé clair.
-- Réponds en français.
-- Affiche les prix en dinars tunisiens (TND).
-- Sois concis mais informatif.
+- Si c'est un tableau simple (distinct), liste les valeurs séparées par des virgules.
+- Réponds en français et affiche les prix en dinars tunisiens (TND).
 `;
-
-  try {
-    const response = await llama.call(prompt);
-    return response.trim();
-  } catch (error) {
-    console.error("Erreur lors de la génération de réponse:", error);
-    return "Désolé, je n'ai pas pu générer une réponse appropriée.";
-  }
+  const resp = await llama.call(prompt);
+  return resp.trim();
 }
 
 // ✅ Main chatbot route
@@ -233,34 +318,65 @@ router.post('/', async (req, res) => {
     const analysis = await analyzeIntent(userQuestion);
     console.log("Analyse finale:", analysis);
 
+    // --- Gérer intent static ---
+    if (analysis.intent === 'static' && analysis.response?.text) {
+      return res.json({
+        success: true,
+        response: analysis.response.text,
+        debug: { intent: 'static' }
+      });
+    }
+
+    // handle unrecognized intent BEFORE any DB call
+    if (analysis.intent === 'none' || !['search','aggregate','list','distinct'].includes(analysis.intent)) {
+      return res.json({
+        success: true,
+        response: "Désolé, je n’ai pas compris votre demande. Pouvez‑vous reformuler ?",
+        debug: { intent: analysis.intent }
+      });
+    }
+
+    // --- Gérer intent distinct ---
     let data;
-    // ✅ Convert category/subCategory to case-insensitive regex
-if (analysis.intent === 'search' && analysis.query) {
-  if (analysis.query.category && typeof analysis.query.category === 'string') {
-    analysis.query.category = new RegExp(`^${analysis.query.category}$`, 'i');
-  }
-  if (analysis.query.subCategory && typeof analysis.query.subCategory === 'string') {
-    analysis.query.subCategory = new RegExp(`^${analysis.query.subCategory}$`, 'i');
-  }
-}
+    if (analysis.intent === 'distinct' && analysis.field) {
+      data = await mongoose.connection.db
+        .collection(analysis.collection)
+        .distinct(analysis.field);
+    } else {
+      // --- Convert category/subCategory to case-insensitive regex for search ---
+      if (analysis.intent === 'search' && analysis.query) {
+        if (analysis.query.category && typeof analysis.query.category === 'string') {
+          analysis.query.category = new RegExp(`^${analysis.query.category}$`, 'i');
+        }
+        if (analysis.query.subCategory && typeof analysis.query.subCategory === 'string') {
+          analysis.query.subCategory = new RegExp(`^${analysis.query.subCategory}$`, 'i');
+        }
+      }
+      // --- Execute find or aggregate ---
+      if (analysis.intent === 'aggregate') {
+        data = await mongoose.connection.db
+          .collection(analysis.collection)
+          .aggregate(analysis.query)
+          .toArray();
+      } else {
+        data = await mongoose.connection.db
+          .collection(analysis.collection)
+          .find(analysis.query)
+          .toArray();
+      }
+    }
 
-if (analysis.intent === 'aggregate') {
-  data = await mongoose.connection.db.collection(analysis.collection).aggregate(analysis.query).toArray();
-} else {
-  data = await mongoose.connection.db.collection(analysis.collection).find(analysis.query).toArray();
-}
-
-
-    console.log(`${data.length} résultats trouvés dans ${analysis.collection}`);
-    const response = await generateResponse(data, userQuestion);
+    console.log(`Résultats trouvés (${data.length}) dans ${analysis.collection}`);
+    const responseText = await generateResponse(data, userQuestion);
 
     res.json({
       success: true,
-      response,
+      response: responseText,
       debug: {
         intent: analysis.intent,
         collection: analysis.collection,
         query: analysis.query,
+        field: analysis.field,
         resultCount: data.length
       }
     });

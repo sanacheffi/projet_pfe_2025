@@ -30,6 +30,24 @@ export const fetchContactMessages = createAsyncThunk(
   }
 );
 
+// Async thunk to toggle treated status
+export const toggleTreated = createAsyncThunk(
+  "contact/toggleTreated",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.patch(
+        `${API_URL}/api/contacts/${id}/treated`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 
 const contactSlice = createSlice({
   name: "contact",
@@ -66,7 +84,16 @@ const contactSlice = createSlice({
       .addCase(fetchContactMessages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(toggleTreated.fulfilled, (state, action) => {
+      // on remplace la réclamation mise à jour dans le tableau
+      state.contactMessages = state.contactMessages.map((msg) =>
+        msg._id === action.payload._id ? action.payload : msg
+      );
+    })
+    .addCase(toggleTreated.rejected, (state, action) => {
+      state.error = action.payload;
+    });
   },
 });
 

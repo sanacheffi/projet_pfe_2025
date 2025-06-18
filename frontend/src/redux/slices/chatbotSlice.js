@@ -1,14 +1,36 @@
-// src/features/chatbot/chatbotSlice.js
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Thunk to send a question to the backend chatbot
+// LocalStorage helpers
+const CHAT_HISTORY_KEY = 'chatbot_history';
+
+function loadHistory() {
+  try {
+    const serialized = localStorage.getItem(CHAT_HISTORY_KEY);
+    if (!serialized) return [];
+    return JSON.parse(serialized);
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(history) {
+  try {
+    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(history));
+  } catch {
+    // ignore write errors
+  }
+}
+
+// Async thunk for sending question
 export const sendQuestion = createAsyncThunk(
   'chatbot/sendQuestion',
   async (question, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, { question });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/chat`,
+        { question }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -18,16 +40,18 @@ export const sendQuestion = createAsyncThunk(
   }
 );
 
+const initialState = {
+  question: '',
+  response: '',
+  loading: false,
+  error: null,
+  debug: null,
+  history: loadHistory(),
+};
+
 const chatbotSlice = createSlice({
   name: 'chatbot',
-  initialState: {
-    question: '',
-    response: '',
-    loading: false,
-    error: null,
-    debug: null,
-    history: [] // [{ question, response, debug }]
-  },
+  initialState,
   reducers: {
     clearChat(state) {
       state.question = '';
@@ -35,43 +59,44 @@ const chatbotSlice = createSlice({
       state.debug = null;
       state.error = null;
       state.history = [];
-    }
+      saveHistory(state.history); // clear localStorage too
+    },
   },
- extraReducers: (builder) => {
-  builder
-    .addCase(sendQuestion.pending, (state, action) => {
-      state.loading = true;
-      state.error = null;
-      state.response = '';
-      state.question = action.meta.arg;
+  extraReducers: (builder) => {
+    builder
+      .addCase(sendQuestion.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+        state.response = '';
+        state.question = action.meta.arg;
 
-      // Immediately add user's question with empty response to history
-      state.history.push({
-        question: action.meta.arg,
-        response: '',
-        debug: null,
+        // Add user's question with empty response to history
+        state.history.push({
+          question: action.meta.arg,
+          response: '',
+          debug: null,
+        });
+        saveHistory(state.history);
+      })
+      .addCase(sendQuestion.fulfilled, (state, action) => {
+        state.loading = false;
+        state.response = action.payload.response;
+        state.debug = action.payload.debug;
+
+        // Update last history entry with the response
+        const lastEntry = state.history[state.history.length - 1];
+        if (lastEntry && lastEntry.question === action.meta.arg && lastEntry.response === '') {
+          lastEntry.response = action.payload.response;
+          lastEntry.debug = action.payload.debug;
+        }
+        saveHistory(state.history);
+      })
+      .addCase(sendQuestion.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        saveHistory(state.history);
       });
-    })
-    .addCase(sendQuestion.fulfilled, (state, action) => {
-      state.loading = false;
-      state.response = action.payload.response;
-      state.debug = action.payload.debug;
-
-      // Update last history entry with the response
-      const lastEntry = state.history[state.history.length - 1];
-      if (lastEntry && lastEntry.question === action.meta.arg && lastEntry.response === '') {
-        lastEntry.response = action.payload.response;
-        lastEntry.debug = action.payload.debug;
-      }
-    })
-    .addCase(sendQuestion.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-
-      // Optionally update last entry with an error message if needed
-    });
-}
-
+  },
 });
 
 export const { clearChat } = chatbotSlice.actions;

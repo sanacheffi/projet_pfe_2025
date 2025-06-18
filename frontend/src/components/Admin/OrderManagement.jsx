@@ -52,7 +52,22 @@ const OrderManagement = () => {
                             <td className="p-4 px-4 font-medium text-gray-900 whitespace-nowrap">#{order._id}</td>
                             <td className="p-4">{order.user.firstName} {order.user.lastName}</td>
                             <td className="p-4">{order.totalPrice.toFixed(3)}</td>
-                            <td className="p-4">{order.status}</td>
+                            <td className="p-4">
+                                <span
+                                className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                                    order.status === "En cours de traitement"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : order.status === "Expédiée"
+                                    ? "bg-orange-100 text-orange-700"
+                                    : order.status === "Livrée"
+                                    ? "bg-green-100 text-green-700"
+                                    : order.status === "Annulée"
+                                    ? "bg-red-100 text-red-700"
+                                    : ""
+                                    }`}>
+                                        {order.status}
+                                </span>
+                            </td>
                             {/* <td className="p-4">
                                 <select 
                                 value={order.status} 
