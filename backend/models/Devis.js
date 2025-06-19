@@ -36,15 +36,15 @@ const devisSchema = new mongoose.Schema({
   company: { type: String },
   description: { type: String },
   products: [devisProductSchema],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  },
   status: {
     type: String,
     enum: ["Non traitée", "En cours de négociation", "Traitée", "Annulée"],
     default: "Non traitée"
-  }
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Devis", devisSchema);

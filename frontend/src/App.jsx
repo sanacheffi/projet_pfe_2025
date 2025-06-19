@@ -45,6 +45,9 @@ import ScrollToTop from './ScrollToTop'
 import ConvertDevisForm from './components/Admin/ConvertDevisForm'
 import Chatbot from './chatbot/Chatbot'
 import ProductCustomization from './pages/ProductCustomization'
+import CustomizationManagement from './components/Admin/CustomizationManagement'
+import CustomizationDetails from './components/Admin/CustomizationDetails'
+import ConvertCustomizationForm from './components/Admin/ConvertCustomizationForm'
 
 const App = () => {
   return (
@@ -95,6 +98,10 @@ const App = () => {
       <Route path="devis" element={<DevisManagement/>}/>
       <Route path="devis/:devisId" element={<DevisDetails/>}/>
       <Route path="/admin/devis/:devisId/convert" element={<ConvertDevisForm />} />
+      <Route path="customization" element={<CustomizationManagement/>}/>
+      <Route path="/admin/customization/:customizationId" element={<CustomizationDetails />} />
+      <Route path="/admin/customization/:customizationId/convert" element={<ConvertCustomizationForm />} />
+
       </Route>
     </Routes>
     </BrowserRouter>

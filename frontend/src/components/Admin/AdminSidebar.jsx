@@ -1,6 +1,6 @@
 import React from 'react';
 import { BsChatSquareTextFill } from 'react-icons/bs';
-import { FaBoxOpen, FaClipboardList, FaSignOutAlt, FaSitemap, FaStore, FaTags, FaTools, FaUser } from 'react-icons/fa';
+import { FaBoxOpen, FaClipboardList, FaPencilRuler, FaSignOutAlt, FaSitemap, FaStore, FaTags, FaTools, FaUser } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/slices/authSlice';
@@ -105,6 +105,15 @@ const AdminSidebar = () => {
               <FaFileInvoiceDollar />
               <span>Demande de devis</span>
           </NavLink>
+          <NavLink 
+  to="/admin/customization"
+  className={({ isActive }) =>
+    isActive
+      ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+      : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"}>
+  <FaPencilRuler />
+  <span>Personnalisations</span>
+</NavLink>
           <NavLink 
               to="/admin/reclamation"
               className={({ isActive }) =>

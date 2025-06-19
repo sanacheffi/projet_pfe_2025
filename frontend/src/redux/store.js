@@ -13,6 +13,7 @@ import categoryReducer from "./slices/categorySlice";
 import subCategoryReducer from "./slices/subCategorySlice";
 import devisReducer from "./slices/devisSlice";
 import chatbotReducer from "./slices/chatbotSlice";
+import customizationReducer from "./slices/customizationSlice";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     subCategory : subCategoryReducer,
     devis : devisReducer,
     chatbot : chatbotReducer,
+    customization : customizationReducer,
   },
 });
 

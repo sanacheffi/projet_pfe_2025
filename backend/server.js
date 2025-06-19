@@ -18,6 +18,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const subCategoryRoutes = require('./routes/subCategoryRoutes');
 const devisRoutes = require("./routes/devisRoutes");
 const chatbotRoute = require("./routes/chatbotRoute");
+const customizationRouter = require('./routes/customizationRoutes');
 
 const app = express();
 app.use(express.json());
@@ -47,6 +48,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/subcategories', subCategoryRoutes);
 app.use("/api/devis", devisRoutes);
 app.use('/api/chat', chatbotRoute);
+app.use('/api/customization', customizationRouter);
 
 //Admin Routes
 app.use("/api/admin/users", adminRoutes);
